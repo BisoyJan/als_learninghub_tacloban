@@ -1,0 +1,524 @@
+# ALS Connect Tacloban — User Manual
+
+> **Version:** 1.0  
+> **Platform:** Web-based (desktop & mobile)  
+> **URL:** https://alsconnect.ph *(or your deployed URL)*
+
+---
+
+## Table of Contents
+
+1. [Getting Started](#1-getting-started)
+2. [Student Guide](#2-student-guide)
+3. [Teacher Guide](#3-teacher-guide)
+4. [Admin Guide](#4-admin-guide)
+5. [Common Features](#5-common-features)
+6. [Frequently Asked Questions](#6-frequently-asked-questions)
+
+---
+
+## 1. Getting Started
+
+### 1.1 Creating Your Account
+
+1. Open the ALS Connect Tacloban website in your browser
+2. Click **Register** on the top-right corner
+3. Fill in the registration form:
+   - **Name** — Your full name
+   - **Email** — A valid email address (this will be your login)
+   - **Password** — At least 8 characters
+   - **Confirm Password** — Re-enter your password
+   - **Role** — Select **Student** or **Teacher**
+4. Click **Register** to create your account
+5. Check your email for a **verification link** and click it to verify your account
+
+> **Note:** Admin accounts cannot be self-registered. Contact your administrator to have an admin account created for you.
+
+### 1.2 Logging In
+
+1. Go to the ALS Connect Tacloban website
+2. Click **Log in**
+3. Enter your **Email** and **Password**
+4. Click **Log in**
+5. You will be redirected to your role-specific **Dashboard**
+
+### 1.3 Forgot Password
+
+1. On the login page, click **Forgot your password?**
+2. Enter the **email address** associated with your account
+3. Click **Email Password Reset Link**
+4. Check your email for a reset link
+5. Click the link and enter your **new password**
+6. Click **Reset Password** to save
+
+### 1.4 Two-Factor Authentication (Optional)
+
+For extra security, you can enable Two-Factor Authentication (2FA):
+
+1. Go to **Settings** → **Two-Factor Authentication**
+2. Confirm your password when prompted
+3. Scan the **QR code** with an authenticator app (e.g., Google Authenticator, Microsoft Authenticator)
+4. Enter the **6-digit code** from the app to confirm setup
+5. **Save your recovery codes** in a safe place — these can be used if you lose access to your authenticator app
+
+When 2FA is enabled, you'll be asked for a code from your authenticator app each time you log in.
+
+---
+
+## 2. Student Guide
+
+### 2.1 Dashboard
+
+After logging in, your Dashboard shows:
+- A **welcome message** with your name
+- Quick links to your key areas (Library, Progress, Forum, Announcements)
+
+### 2.2 Learning Library
+
+Browse and access all available learning materials:
+
+1. Click **Library** in the sidebar
+2. You'll see a list of all **published** learning modules
+3. **Filter** modules by:
+   - **Subject** — Use the dropdown to select a specific subject (English, Math, Science, etc.)
+   - **Search** — Type keywords in the search box to find specific modules
+4. Click on any module to view its **details and resources**
+5. From the module page, you can:
+   - Read the module description
+   - Download attached resources (PDFs, documents)
+   - View linked videos or external resources
+
+> **Tip:** Only published modules appear in the library. If a teacher or admin has assigned you a module that doesn't appear, ask them to publish it first.
+
+### 2.3 My Progress
+
+Track your learning journey:
+
+1. Click **My Progress** in the sidebar
+2. You'll see an **overview** with:
+   - **Total enrollments** — Number of modules you're enrolled in
+   - **Completed** — Modules you've finished
+   - **In Progress** — Modules you're currently working on
+   - **Average Score** — Your overall average across all assessments
+3. Below the overview, see a list of all your **enrollments** with status indicators
+4. Click on any enrollment to view **detailed progress records**:
+   - Individual assessment scores
+   - Activity completions
+   - Milestones achieved
+   - Teacher's remarks
+
+### 2.4 Progress Report
+
+Generate a printable progress report:
+
+1. From your progress detail page, look for the **View Report** link
+2. Click it to open your **Progress Report** page
+3. The report shows:
+   - Your personal information
+   - Module details
+   - All progress records with scores
+   - Average score summary
+4. Use your browser's **Print** function (Ctrl+P / Cmd+P) to print or save as PDF
+
+### 2.5 Notifications
+
+Stay updated with important notifications:
+
+1. Check the **bell icon** in the sidebar — a badge shows your unread count
+2. Click it or go to **Notifications** to see all notifications
+3. Types of notifications you may receive:
+   - New announcements relevant to your role
+   - Replies to your forum threads
+4. Click **Mark as Read** on individual notifications, or **Mark All as Read** to clear all
+
+---
+
+## 3. Teacher Guide
+
+### 3.1 Dashboard
+
+Your Teacher Dashboard provides a quick overview of your activity and quick access to all teacher features.
+
+### 3.2 Gradebook
+
+Manage student enrollments and track their progress:
+
+#### Enrolling a Student
+
+1. Click **Gradebook** in the sidebar
+2. Click **Enroll Student**
+3. Select the **Student** from the dropdown
+4. Select the **Learning Module** to enroll them in
+5. Click **Enroll**
+
+> **Note:** A student cannot be enrolled in the same module twice.
+
+#### Adding Progress Records
+
+1. From the Gradebook, click on an **enrollment** to view details
+2. Click **Add Record**
+3. Fill in the record details:
+   - **Title** — Name of the assessment/activity (e.g., "Module 1 Quiz")
+   - **Type** — Assessment, Activity, or Milestone
+   - **Score** — Points achieved (optional)
+   - **Max Score** — Maximum possible points (optional)
+   - **Date** — Date of the activity
+   - **Remarks** — Any notes about the student's performance
+4. Click **Save**
+5. The enrollment status will automatically change to **In Progress** when the first record is added
+
+#### Marking as Completed
+
+1. From the enrollment detail page, use the **Status** control
+2. Change the status to **Completed**
+3. The completion date will be automatically recorded
+
+#### Deleting Records
+
+1. On the enrollment detail page, find the record to delete
+2. Click the **Delete** button next to the record
+3. Confirm the deletion
+
+### 3.3 Managing Announcements
+
+Create and manage announcements for your students:
+
+#### Creating an Announcement
+
+1. Click **Announcements** in the sidebar
+2. Click **Manage Announcements** (visible to teachers and admins)
+3. Click **Create Announcement**
+4. Fill in:
+   - **Title** — Announcement headline
+   - **Body** — Full announcement content
+   - **Audience** — Who should see it:
+     - *All* — Everyone
+     - *Students* — Only students
+     - *Teachers* — Only teachers
+     - *Admins* — Only administrators
+   - **Published** — Toggle to publish immediately or save as draft
+   - **Pinned** — Toggle to pin the announcement to the top of the list
+5. Click **Save**
+
+> **Important:** When an announcement is published, notifications are automatically sent to all users in the target audience (both in-app and via email).
+
+#### Publishing a Draft
+
+1. From the Manage Announcements page, find the draft
+2. Click **Publish** to make it live
+3. Notifications will be sent to the target audience upon publishing
+
+### 3.4 Forum Participation
+
+Participate in and monitor the community forum:
+
+1. Click **Forum** in the sidebar
+2. **Browse threads** by category or search for topics
+3. **Create a new thread** by clicking "New Thread"
+4. **Reply** to existing threads to help students
+5. **Delete** your own threads and replies if needed
+
+> **Note:** Only admins can lock or pin threads.
+
+### 3.5 Reports
+
+View progress reports for your enrolled students:
+
+1. From the Gradebook, open an enrollment
+2. Click **View Report** to generate a printable progress report for that student
+
+---
+
+## 4. Admin Guide
+
+### 4.1 Dashboard
+
+The Admin Dashboard shows system-wide statistics:
+- **Total Students** — Number of registered student accounts
+- **Total Teachers** — Number of registered teacher accounts
+- **Total Modules** — Number of learning modules in the system
+- **Recent Activity** — Latest system events
+
+### 4.2 User Management
+
+Manage all user accounts in the system:
+
+#### Viewing Users
+
+1. Click **Admin** → **Users** in the sidebar
+2. See a paginated list of all users with name, email, role, and status
+3. **Filter** by role using the dropdown
+4. **Search** by name or email using the search box
+
+#### Creating a User
+
+1. Click **Create User**
+2. Fill in: Name, Email, Role (Admin, Teacher, or Student), Password
+3. Click **Save**
+
+> **Note:** Admin accounts can only be created by other admins through this interface.
+
+#### Editing a User
+
+1. Find the user in the list and click **Edit**
+2. Update the desired fields
+3. Leave the password field blank to keep the current password
+4. Click **Save**
+
+#### Deactivating/Activating Users
+
+1. Find the user in the list
+2. Click the **Toggle Status** button
+3. Inactive users cannot log in to the system
+
+> **Note:** You cannot deactivate your own account.
+
+#### Deleting a User
+
+1. Find the user and click **Delete**
+2. Confirm the deletion
+
+> **Warning:** Deleting a user permanently removes their account and all associated data (enrollments, progress records, forum posts, etc.).
+
+#### Bulk Import Users
+
+1. Click **Import Users**
+2. First, download the **CSV template** by clicking "Download Template"
+3. Fill in the template with user data:
+   - Columns: `name`, `email`, `role`, `password`
+   - One user per row
+4. Upload the completed CSV file
+5. The system will:
+   - Create accounts for new email addresses
+   - **Skip** emails that already exist
+   - Report the number of imported and skipped records
+
+#### Export Users
+
+1. Click **Export Users**
+2. A CSV file will download containing all users with their: name, email, role, status, and registration date
+
+### 4.3 Module Management
+
+Create and manage learning modules:
+
+#### Creating a Module
+
+1. Click **Admin** → **Modules** in the sidebar
+2. Click **Create Module**
+3. Fill in:
+   - **Title** — Module name
+   - **Subject** — Select from available subjects
+   - **Level** — Elementary, Junior High, or Senior High
+   - **Description** — Module overview
+   - **Status** — Draft (not visible in library) or Published (visible to all)
+4. Click **Save**
+
+#### Adding Resources to a Module
+
+1. Open a module by clicking on it
+2. In the Resources section, click **Add Resource**
+3. Fill in:
+   - **Title** — Resource name
+   - **Type** — PDF, Video, Link, Document, or Image
+   - **File** — Upload a file (for PDF, Document, Image)
+   - **URL** — Enter a link (for Video, Link)
+   - **Description** — Optional description
+4. Click **Upload**
+
+#### Editing a Module
+
+1. Click **Edit** on the module
+2. Update fields as needed
+3. Click **Save**
+
+#### Removing Resources
+
+1. In the module view, find the resource to remove
+2. Click **Delete** next to the resource
+3. The file will be removed from storage
+
+#### Deleting a Module
+
+1. Click **Delete** on the module
+2. Confirm the deletion
+
+> **Warning:** Deleting a module removes all its resources, enrollments, and progress records.
+
+### 4.4 System Settings
+
+Configure system-wide settings:
+
+1. Click **Admin** → **Settings** in the sidebar
+2. Update settings such as:
+   - **School Year** — Current academic year
+   - **Term** — Current term/semester
+   - Other system configuration options
+3. Click **Save Settings**
+
+### 4.5 Forum Moderation
+
+Admins have special moderation powers in the forum:
+
+#### Pinning Threads
+- Pinned threads appear at the top of the thread list
+- Click the **Pin** button on any thread to toggle pinning
+
+#### Locking Threads
+- Locked threads cannot receive new replies
+- Click the **Lock** button on any thread to toggle locking
+- Useful for resolved discussions or to prevent spam
+
+#### Deleting Content
+- Admins can **delete any thread or reply**, regardless of author
+- Use this power responsibly to maintain community standards
+
+---
+
+## 5. Common Features
+
+### 5.1 Sidebar Navigation
+
+The sidebar adapts to your role and shows only the features available to you:
+
+| Menu Item | Student | Teacher | Admin |
+|---|:---:|:---:|:---:|
+| Dashboard | ✓ | ✓ | ✓ |
+| Library | ✓ | ✓ | ✓ |
+| My Progress | ✓ | — | — |
+| Gradebook | — | ✓ | ✓ |
+| Announcements | ✓ | ✓ | ✓ |
+| Forum | ✓ | ✓ | ✓ |
+| Notifications | ✓ | ✓ | ✓ |
+| Users | — | — | ✓ |
+| Modules | — | — | ✓ |
+| Settings (System) | — | — | ✓ |
+| Settings (Profile) | ✓ | ✓ | ✓ |
+
+### 5.2 Profile Settings
+
+Update your personal information:
+
+1. Go to **Settings** → **Profile**
+2. You can update your **Name** and **Email**
+3. Click **Save**
+
+> **Note:** If you change your email, you'll need to verify the new email address.
+
+### 5.3 Password Settings
+
+Change your password:
+
+1. Go to **Settings** → **Password**
+2. Enter your **Current Password**
+3. Enter your **New Password** (at least 8 characters)
+4. Confirm your new password
+5. Click **Save**
+
+### 5.4 Appearance Settings
+
+Customize the look and feel:
+
+1. Go to **Settings** → **Appearance**
+2. Choose between **Light**, **Dark**, or **System** theme
+3. Your preference is saved automatically
+
+### 5.5 Announcements (Viewing)
+
+All users can view published announcements:
+
+1. Click **Announcements** in the sidebar
+2. See a list of announcements relevant to your role
+3. **Pinned** announcements appear at the top
+4. Click on any announcement to read the full content
+
+> **Note:** You only see announcements targeted at your role (or "All" audience).
+
+### 5.6 Forum (Participating)
+
+The community forum is available to all authenticated users:
+
+#### Browsing Threads
+1. Click **Forum** in the sidebar
+2. Browse threads sorted by most recent
+3. Filter by **category** using the category dropdown
+4. **Search** threads by keyword
+
+#### Creating a Thread
+1. Click **New Thread**
+2. Select a **Category**
+3. Enter a **Title** and **Body**
+4. Click **Create Thread**
+
+#### Replying to a Thread
+1. Open a thread by clicking on it
+2. Scroll to the reply form at the bottom
+3. Type your reply
+4. Click **Post Reply**
+
+> **Note:** You cannot reply to locked threads. The thread author will receive a notification when someone replies.
+
+#### Deleting Your Posts
+- You can delete your own threads and replies
+- Click the **Delete** button next to your post
+- This action is permanent
+
+---
+
+## 6. Frequently Asked Questions
+
+### General
+
+**Q: What browsers are supported?**  
+A: ALS Connect Tacloban works on all modern browsers including Chrome, Firefox, Safari, and Edge. We recommend using the latest version for the best experience.
+
+**Q: Can I use it on my phone?**  
+A: Yes! The platform is fully responsive and works on mobile phones and tablets. Simply open the website in your mobile browser.
+
+**Q: I forgot my password. What do I do?**  
+A: Click "Forgot your password?" on the login page. Enter your email and check your inbox for a reset link.
+
+**Q: My account is inactive. What happened?**  
+A: An administrator may have deactivated your account. Contact your ALS teacher or administrator to have it reactivated.
+
+### For Students
+
+**Q: How do I see my grades?**  
+A: Go to **My Progress** to see all your enrollments and scores. Click on any enrollment to see detailed records.
+
+**Q: I can't find a module in the Library. Why?**  
+A: Only published modules appear in the Library. The module may still be in draft status. Ask your teacher to publish it.
+
+**Q: How do I print my progress report?**  
+A: From your progress detail page, click **View Report**, then use your browser's print function (Ctrl+P / Cmd+P).
+
+### For Teachers
+
+**Q: How do I enroll a student?**  
+A: Go to **Gradebook** → **Enroll Student**. Select the student and module, then click Enroll.
+
+**Q: Can I edit a progress record after saving?**  
+A: Currently, you can delete a record and create a new one with the corrected information.
+
+**Q: How do I know who received my announcement?**  
+A: Announcements are targeted by audience (All, Students, Teachers, Admins). All active users matching the audience will receive notifications when you publish the announcement.
+
+### For Admins
+
+**Q: How do I create an admin account?**  
+A: Go to **Admin** → **Users** → **Create User** and select the "Admin" role. Admin accounts cannot be self-registered.
+
+**Q: How do I bulk import users?**  
+A: Go to **Users**, click **Import**, download the CSV template, fill it in, and upload. The system will create accounts and skip any existing emails.
+
+**Q: What happens when I delete a user?**  
+A: All data associated with that user is permanently deleted, including enrollments, progress records, forum posts, and announcements they created.
+
+---
+
+## Support
+
+If you encounter any issues or have questions not covered in this manual, please contact:
+
+- **System Administrator:** admin@alsconnect.ph
+- **ALS District Office:** Tacloban City Division, Department of Education

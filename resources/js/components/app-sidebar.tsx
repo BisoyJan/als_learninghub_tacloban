@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, ClipboardList, Folder, LayoutGrid, Megaphone, MessageSquare, Settings, Users } from 'lucide-react';
+import { BarChart3, Bell, BookOpen, ClipboardList, Folder, LayoutGrid, Megaphone, MessageSquare, Settings, Users } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -28,22 +28,22 @@ function getNavItems(role: UserRole): NavItem[] {
     const studentItems: NavItem[] = [
         {
             title: 'My Modules',
-            href: '#',
+            href: '/library',
             icon: BookOpen,
         },
         {
             title: 'My Progress',
-            href: '#',
+            href: '/progress',
             icon: ClipboardList,
         },
         {
             title: 'Announcements',
-            href: '#',
+            href: '/announcements',
             icon: Megaphone,
         },
         {
             title: 'Forum',
-            href: '#',
+            href: '/forum',
             icon: MessageSquare,
         },
     ];
@@ -51,27 +51,27 @@ function getNavItems(role: UserRole): NavItem[] {
     const teacherItems: NavItem[] = [
         {
             title: 'My Students',
-            href: '#',
+            href: '/gradebook',
             icon: Users,
         },
         {
             title: 'Modules',
-            href: '#',
+            href: '/library',
             icon: BookOpen,
         },
         {
             title: 'Progress Tracking',
-            href: '#',
+            href: '/gradebook',
             icon: ClipboardList,
         },
         {
             title: 'Announcements',
-            href: '#',
+            href: '/announcements',
             icon: Megaphone,
         },
         {
             title: 'Forum',
-            href: '#',
+            href: '/forum',
             icon: MessageSquare,
         },
     ];
@@ -79,28 +79,33 @@ function getNavItems(role: UserRole): NavItem[] {
     const adminItems: NavItem[] = [
         {
             title: 'User Management',
-            href: '#',
+            href: '/admin/users',
             icon: Users,
         },
         {
             title: 'Modules',
-            href: '#',
+            href: '/admin/modules',
             icon: BookOpen,
         },
         {
             title: 'Announcements',
-            href: '#',
+            href: '/announcements-manage',
             icon: Megaphone,
         },
         {
             title: 'Forum',
-            href: '#',
+            href: '/forum',
             icon: MessageSquare,
         },
         {
             title: 'Settings',
-            href: '#',
+            href: '/admin/settings',
             icon: Settings,
+        },
+        {
+            title: 'Reports',
+            href: '/admin/reports',
+            icon: BarChart3,
         },
     ];
 

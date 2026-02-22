@@ -4,6 +4,13 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
 import { login } from '@/routes';
@@ -59,16 +66,18 @@ export default function Register() {
 
                             <div className="grid gap-2">
                                 <Label htmlFor="role">I am a</Label>
-                                <select
-                                    id="role"
+                                <Select
                                     name="role"
                                     defaultValue="student"
-                                    tabIndex={3}
-                                    className="border-input bg-transparent text-foreground focus-visible:border-ring focus-visible:ring-ring/50 flex h-9 w-full rounded-md border px-3 py-1.5 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
                                 >
-                                    <option value="student">Student / Learner</option>
-                                    <option value="teacher">Teacher / Facilitator</option>
-                                </select>
+                                    <SelectTrigger id="role" tabIndex={3}>
+                                        <SelectValue placeholder="Select your role" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="student">Student / Learner</SelectItem>
+                                        <SelectItem value="teacher">Teacher / Facilitator</SelectItem>
+                                    </SelectContent>
+                                </Select>
                                 <InputError message={errors.role} />
                             </div>
 

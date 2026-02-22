@@ -101,7 +101,7 @@ export default function TwoFactorRecoveryCodes({
                 <div
                     id="recovery-codes-section"
                     className={`relative overflow-hidden transition-all duration-300 ${codesAreVisible ? 'h-auto opacity-100' : 'h-0 opacity-0'}`}
-                    aria-hidden={!codesAreVisible}
+                    aria-hidden={!codesAreVisible ? 'true' : 'false'}
                 >
                     <div className="mt-3 space-y-3">
                         {errors?.length ? (
@@ -127,6 +127,7 @@ export default function TwoFactorRecoveryCodes({
                                     ) : (
                                         <div
                                             className="space-y-2"
+                                            role="listitem"
                                             aria-label="Loading recovery codes"
                                         >
                                             {Array.from(

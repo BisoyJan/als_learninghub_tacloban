@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\CommunicationSeeder;
+use Database\Seeders\EnrollmentSeeder;
+use Database\Seeders\LearningModuleSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -38,5 +41,14 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create([
             'role' => 'student',
         ]);
+
+        // Seed learning modules & subjects
+        $this->call(LearningModuleSeeder::class);
+
+        // Seed sample enrollments & progress records
+        $this->call(EnrollmentSeeder::class);
+
+        // Seed announcements, forum categories, threads & replies
+        $this->call(CommunicationSeeder::class);
     }
 }
