@@ -51,7 +51,7 @@ function getNavItems(role: UserRole): NavItem[] {
     const teacherItems: NavItem[] = [
         {
             title: 'My Students',
-            href: '/gradebook',
+            href: '/gradebook/students',
             icon: Users,
         },
         {

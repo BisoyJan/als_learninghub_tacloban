@@ -16,6 +16,64 @@ use Inertia\Response;
 class GradebookController extends Controller
 {
     /**
+     * List unique students enrolled by the teacher (or all for admins).
+     */
+    public function students(Request $request): Response
+    {
+        $user = $request->user();
+        $query = Enrollment::with(['student', 'module.subject']);
+
+        if ($user->isTeacher()) {
+            $query->where('enrolled_by', $user->id);
+        }
+
+        if ($search = $request->input('search')) {
+            $query->whereHas('student', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // Group enrollments by student
+        $enrollments = $query->orderBy('created_at', 'desc')->get();
+
+        $students = $enrollments->groupBy('student_id')->map(function ($group) {
+            $student = $group->first()->student;
+            return [
+                'id' => $student->id,
+                'name' => $student->name,
+                'email' => $student->email,
+                'enrollments_count' => $group->count(),
+                'completed_count' => $group->where('status', 'completed')->count(),
+                'in_progress_count' => $group->where('status', 'in_progress')->count(),
+                'modules' => $group->map(fn ($e) => [
+                    'id' => $e->module->id,
+                    'title' => $e->module->title,
+                    'subject' => $e->module->subject?->name,
+                    'status' => $e->status,
+                    'status_label' => $e->status_label,
+                    'enrollment_id' => $e->id,
+                ])->values(),
+            ];
+        })->values();
+
+        // Simple pagination
+        $page = (int) $request->input('page', 1);
+        $perPage = 15;
+        $paginated = $students->forPage($page, $perPage);
+
+        return Inertia::render('gradebook/students', [
+            'students' => [
+                'data' => $paginated->values(),
+                'total' => $students->count(),
+                'current_page' => $page,
+                'last_page' => (int) ceil($students->count() / $perPage),
+            ],
+            'filters' => $request->only(['search']),
+        ]);
+    }
+
+    /**
      * Teacher gradebook: list all enrollments across their modules.
      */
     public function index(Request $request): Response

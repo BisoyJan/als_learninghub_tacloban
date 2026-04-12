@@ -34,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Gradebook routes (teachers & admins)
 Route::middleware(['auth', 'verified', 'role:teacher,admin'])->prefix('gradebook')->name('gradebook.')->group(function () {
+    Route::get('students', [GradebookController::class, 'students'])->name('students');
     Route::get('/', [GradebookController::class, 'index'])->name('index');
     Route::post('enroll', [GradebookController::class, 'enroll'])->name('enroll');
     Route::get('{enrollment}', [GradebookController::class, 'show'])->name('show');
