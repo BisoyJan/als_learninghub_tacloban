@@ -1,6 +1,7 @@
 # ALS Connect Tacloban — User Manual
 
-> **Version:** 1.0  
+> **Version:** 1.1  
+> **Last Updated:** April 17, 2026  
 > **Platform:** Web-based (desktop & mobile)  
 > **URL:** https://alsconnect.ph *(or your deployed URL)*
 
@@ -70,8 +71,13 @@ When 2FA is enabled, you'll be asked for a code from your authenticator app each
 ### 2.1 Dashboard
 
 After logging in, your Dashboard shows:
-- A **welcome message** with your name
-- Quick links to your key areas (Library, Progress, Forum, Announcements)
+- A **welcome message** with your name and a summary of your learning journey
+- **Stat cards** at a glance:
+  - **Modules Available** — Total number of published modules you can access
+  - **Enrolled** — Number of active module enrollments
+  - **Completed** — Number of modules you have finished
+  - **Announcements** — Number of announcements posted for you
+- **Quick action cards** to jump directly to: Browse Modules, My Progress, Announcements, and Forum
 
 ### 2.2 Learning Library
 
@@ -111,14 +117,24 @@ Track your learning journey:
 
 Generate a printable progress report:
 
-1. From your progress detail page, look for the **View Report** link
-2. Click it to open your **Progress Report** page
-3. The report shows:
+1. From your progress detail page, click the **Print Report** button (top-right of the page)
+2. A new tab opens with your **Progress Report** showing:
    - Your personal information
    - Module details
    - All progress records with scores
    - Average score summary
-4. Use your browser's **Print** function (Ctrl+P / Cmd+P) to print or save as PDF
+3. Use your browser's **Print** function (Ctrl+P / Cmd+P) to print or save as PDF
+
+### 2.5 Certificate of Completion
+
+Download your certificate once you complete a module:
+
+- The **View Certificate** button appears automatically on your progress detail page when your enrollment status is **Completed**
+- Click **View Certificate** to open the printable certificate in a new tab
+- The certificate includes your name, the module title, completion date, and the ALS center name
+- Use your browser's **Print** function (Ctrl+P / Cmd+P) to print or save as PDF
+
+> **Note:** The certificate button only appears for fully completed enrollments. Contact your teacher if you believe your module should be marked as complete.
 
 ### 2.5 Notifications
 
@@ -137,9 +153,29 @@ Stay updated with important notifications:
 
 ### 3.1 Dashboard
 
-Your Teacher Dashboard provides a quick overview of your activity and quick access to all teacher features.
+Your Teacher Dashboard gives you an overview of your activity with the following stat cards:
+- **My Students** — Total number of students enrolled in your modules
+- **Modules** — Total available learning modules
+- **Active Enrollments** — Number of enrollments currently in progress across all your modules
+- **My Threads** — Number of forum discussion threads you have created
 
-### 3.2 Gradebook
+**Quick action cards** let you jump directly to: Student Progress (Gradebook), Browse Library, Announcements, and Community Forum.
+
+### 3.2 My Students
+
+View an overview of all students enrolled in your modules:
+
+1. Click **Gradebook** → **My Students** in the sidebar (or from the Gradebook page)
+2. You'll see a table listing all your students with:
+   - **Student name and email**
+   - **Enrolled Modules** — Total number of modules the student is enrolled in
+   - **In Progress** — Number of modules currently active
+   - **Completed** — Number of modules the student has finished
+   - **Modules** — A quick list of their enrolled module names with status badges
+3. Use the **Search** box to filter students by name or email
+4. Click a student row to go directly to their enrollment details in the Gradebook
+
+### 3.3 Gradebook
 
 Manage student enrollments and track their progress:
 
@@ -179,7 +215,7 @@ Manage student enrollments and track their progress:
 2. Click the **Delete** button next to the record
 3. Confirm the deletion
 
-### 3.3 Managing Announcements
+### 3.4 Managing Announcements
 
 Create and manage announcements for your students:
 
@@ -208,7 +244,7 @@ Create and manage announcements for your students:
 2. Click **Publish** to make it live
 3. Notifications will be sent to the target audience upon publishing
 
-### 3.4 Forum Participation
+### 3.5 Forum Participation
 
 Participate in and monitor the community forum:
 
@@ -220,7 +256,7 @@ Participate in and monitor the community forum:
 
 > **Note:** Only admins can lock or pin threads.
 
-### 3.5 Reports
+### 3.6 Reports
 
 View progress reports for your enrolled students:
 
@@ -233,11 +269,14 @@ View progress reports for your enrolled students:
 
 ### 4.1 Dashboard
 
-The Admin Dashboard shows system-wide statistics:
-- **Total Students** — Number of registered student accounts
-- **Total Teachers** — Number of registered teacher accounts
-- **Total Modules** — Number of learning modules in the system
-- **Recent Activity** — Latest system events
+The Admin Dashboard shows system-wide statistics at a glance:
+- **Total Users** — All registered accounts (with active user count)
+- **Teachers** — Number of teacher accounts
+- **Students** — Number of student/learner accounts
+- **Modules** — Total modules (with published count)
+- **Enrollments** — Total enrollments (with completed count)
+
+**Quick action cards** let you jump directly to: User Management, Module Management, Reports & Analytics, and System Settings.
 
 ### 4.2 User Management
 
@@ -356,7 +395,37 @@ Configure system-wide settings:
    - Other system configuration options
 3. Click **Save Settings**
 
-### 4.5 Forum Moderation
+### 4.5 Reports & Analytics
+
+View center-wide performance data and analytics:
+
+1. Click **Admin** → **Reports** in the sidebar (or from the Dashboard quick action)
+2. The page displays the following sections:
+
+   **Center-wide Stats (top cards):**
+   - **Total Students** — Total registered students and how many are active
+   - **Total Teachers** — Number of teacher accounts
+   - **Published Modules** — Number of published modules and total enrollments
+   - **Completion Rate** — Percentage of completed enrollments out of all enrollments
+
+   **Enrollment Completion Chart (Pie Chart):**
+   - Visual breakdown of enrollments by status: Completed, In Progress, and Dropped
+
+   **Enrollments by Subject (Bar Chart):**
+   - Compares the number of enrolled vs. completed learners per subject
+
+   **Module Performance Table:**
+   - Lists each module with: Subject, Level, number of enrolled students, completed count, in-progress count, and completion rate
+
+   **Subject Summary Table:**
+   - Lists each subject with: total modules, enrolled count, completed count, and completion rate
+
+   **Top Students:**
+   - Ranks students by the number of modules completed out of total enrollments
+
+> **Note:** All data on this page updates in real time based on current enrollments and progress records.
+
+### 4.6 Forum Moderation
 
 Admins have special moderation powers in the forum:
 
@@ -387,11 +456,13 @@ The sidebar adapts to your role and shows only the features available to you:
 | Library | ✓ | ✓ | ✓ |
 | My Progress | ✓ | — | — |
 | Gradebook | — | ✓ | ✓ |
+| My Students | — | ✓ | — |
 | Announcements | ✓ | ✓ | ✓ |
 | Forum | ✓ | ✓ | ✓ |
 | Notifications | ✓ | ✓ | ✓ |
 | Users | — | — | ✓ |
 | Modules | — | — | ✓ |
+| Reports & Analytics | — | — | ✓ |
 | Settings (System) | — | — | ✓ |
 | Settings (Profile) | ✓ | ✓ | ✓ |
 
@@ -404,6 +475,15 @@ Update your personal information:
 3. Click **Save**
 
 > **Note:** If you change your email, you'll need to verify the new email address.
+
+#### Deleting Your Account
+
+1. Scroll to the bottom of the **Profile** settings page
+2. Click **Delete Account**
+3. Enter your password to confirm
+4. Click **Delete** — this action is **permanent and cannot be undone**
+
+> **Warning:** Deleting your account permanently removes all your data including enrollments, progress records, forum posts, and announcements.
 
 ### 5.3 Password Settings
 
