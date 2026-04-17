@@ -30,7 +30,7 @@ export default function Login({
             <Head title="Log in" />
 
             {status && (
-                <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-center text-sm font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400">
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center text-sm font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400">
                     {status}
                 </div>
             )}
@@ -44,7 +44,7 @@ export default function Login({
                     <>
                         <div className="grid gap-5">
                             <div className="grid gap-1.5">
-                                <Label htmlFor="email" className="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
+                                <Label htmlFor="email" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                     Email address
                                 </Label>
                                 <Input
@@ -56,14 +56,14 @@ export default function Login({
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="email@example.com"
-                                    className="h-11 rounded-lg border-[#e3e3e0] bg-white px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-[#3E3E3A] dark:bg-[#161615]"
+                                    className="h-11 rounded-xl border-zinc-200 bg-zinc-50 px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800"
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-1.5">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password" className="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
+                                    <Label htmlFor="password" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                         Password
                                     </Label>
                                     {canResetPassword && (
@@ -84,7 +84,7 @@ export default function Login({
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="Password"
-                                    className="h-11 rounded-lg border-[#e3e3e0] bg-white px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-[#3E3E3A] dark:bg-[#161615]"
+                                    className="h-11 rounded-xl border-zinc-200 bg-zinc-50 px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -95,14 +95,14 @@ export default function Login({
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember" className="text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                                <Label htmlFor="remember" className="text-sm text-zinc-500 dark:text-zinc-400">
                                     Remember me
                                 </Label>
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-2 h-11 w-full rounded-lg bg-emerald-600 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md"
+                                className="mt-2 h-11 w-full rounded-xl bg-emerald-600 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition-all hover:bg-emerald-700 hover:shadow-xl hover:shadow-emerald-600/25"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
@@ -113,7 +113,7 @@ export default function Login({
                         </div>
 
                         {canRegister && (
-                            <div className="text-center text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                            <div className="text-center text-sm text-zinc-500 dark:text-zinc-400">
                                 Don&apos;t have an account?{' '}
                                 <TextLink
                                     href={register()}

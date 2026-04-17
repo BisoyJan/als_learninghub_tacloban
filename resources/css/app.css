@@ -152,11 +152,11 @@
     }
 }
 
-/* Scroll reveal animations */
-@keyframes reveal-up {
+/* ── Welcome page: section fade-in on scroll ─────────────────────── */
+@keyframes fade-up {
     from {
         opacity: 0;
-        transform: translateY(32px);
+        transform: translateY(28px);
     }
     to {
         opacity: 1;
@@ -164,63 +164,127 @@
     }
 }
 
-@keyframes reveal-scale {
+@keyframes fade-scale-up {
     from {
         opacity: 0;
-        transform: scale(0.95);
+        transform: translateY(40px) scale(0.97);
     }
     to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
     }
 }
 
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-12px);
-    }
+@keyframes glow-pulse {
+    0%, 100% { opacity: 0.15; transform: translate(-50%, 0) scale(1); }
+    50% { opacity: 0.25; transform: translate(-50%, 0) scale(1.05); }
 }
 
-@keyframes float-slow {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg);
-    }
-    50% {
-        transform: translateY(-18px) rotate(3deg);
-    }
+@keyframes glow-drift {
+    0%, 100% { opacity: 0.1; transform: translate(0, 0); }
+    50% { opacity: 0.18; transform: translate(-12px, 8px); }
 }
 
-.animate-reveal-up {
-    animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+.fade-section {
+    opacity: 0;
+    transform: translateY(28px);
 }
 
-.animate-reveal-scale {
-    animation: reveal-scale 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+.fade-section.in-view {
+    animation: fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Hero staggered entrance animations */
+.hero-enter-badge {
+    opacity: 0;
+    animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+.hero-enter-heading {
+    opacity: 0;
+    animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+.hero-enter-text {
+    opacity: 0;
+    animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+.hero-enter-actions {
+    opacity: 0;
+    animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+.hero-enter-mockup {
+    opacity: 0;
+    animation: fade-scale-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+/* Background glow animations */
+.hero-glow-primary {
+    animation: glow-pulse 6s ease-in-out infinite;
+}
+.hero-glow-secondary {
+    animation: glow-drift 8s ease-in-out infinite;
+}
+
+/* Staggered card entrance (used with .in-view parent) */
+.fade-section.in-view .stagger-card {
+    opacity: 0;
+    animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.fade-section.in-view .stagger-card:nth-child(1) { animation-delay: 0.05s; }
+.fade-section.in-view .stagger-card:nth-child(2) { animation-delay: 0.1s; }
+.fade-section.in-view .stagger-card:nth-child(3) { animation-delay: 0.15s; }
+.fade-section.in-view .stagger-card:nth-child(4) { animation-delay: 0.2s; }
+.fade-section.in-view .stagger-card:nth-child(5) { animation-delay: 0.25s; }
+.fade-section.in-view .stagger-card:nth-child(6) { animation-delay: 0.3s; }
+
+/* Hero background grid pattern */
+.hero-grid {
+    background-image:
+        linear-gradient(to right, currentColor 1px, transparent 1px),
+        linear-gradient(to bottom, currentColor 1px, transparent 1px);
+    background-size: 64px 64px;
+}
+
+/* Hero gradient text highlight */
+.hero-gradient-text {
+    background: linear-gradient(135deg, #059669, #0d9488, #0284c7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+:is(.dark) .hero-gradient-text {
+    background: linear-gradient(135deg, #34d399, #2dd4bf, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Glow behind the hero mockup */
+.hero-mockup-glow {
+    background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.08) 60%, transparent);
+}
+
+:is(.dark) .hero-mockup-glow {
+    background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.04) 60%, transparent);
+}
+
+/* Auth layout helpers (kept from previous design) */
 .animate-float {
-    animation: float 6s ease-in-out infinite;
+    animation: float-auth 6s ease-in-out infinite;
 }
 
 .animate-float-slow {
-    animation: float-slow 8s ease-in-out infinite;
+    animation: float-auth-slow 8s ease-in-out infinite;
 }
 
-/* Scroll reveal - hidden by default, shown when in viewport */
-.scroll-reveal {
-    opacity: 0;
-    transform: translateY(32px);
+@keyframes float-auth {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
 }
 
-.scroll-reveal.revealed {
-    animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-float-delayed {
-    animation: float 6s ease-in-out 1s infinite;
+@keyframes float-auth-slow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-18px) rotate(3deg); }
 }
 
 .cta-dot-pattern {

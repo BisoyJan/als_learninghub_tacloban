@@ -33,7 +33,7 @@ export default function Register() {
                     <>
                         <div className="grid gap-5">
                             <div className="grid gap-1.5">
-                                <Label htmlFor="name" className="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
+                                <Label htmlFor="name" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                     Full name
                                 </Label>
                                 <Input
@@ -45,7 +45,7 @@ export default function Register() {
                                     autoComplete="name"
                                     name="name"
                                     placeholder="Juan Dela Cruz"
-                                    className="h-11 rounded-lg border-[#e3e3e0] bg-white px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-[#3E3E3A] dark:bg-[#161615]"
+                                    className="h-11 rounded-xl border-zinc-200 bg-zinc-50 px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800"
                                 />
                                 <InputError
                                     message={errors.name}
@@ -53,7 +53,7 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-1.5">
-                                <Label htmlFor="email" className="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
+                                <Label htmlFor="email" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                     Email address
                                 </Label>
                                 <Input
@@ -64,13 +64,13 @@ export default function Register() {
                                     autoComplete="email"
                                     name="email"
                                     placeholder="email@example.com"
-                                    className="h-11 rounded-lg border-[#e3e3e0] bg-white px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-[#3E3E3A] dark:bg-[#161615]"
+                                    className="h-11 rounded-xl border-zinc-200 bg-zinc-50 px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800"
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-1.5">
-                                <Label htmlFor="role" className="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
+                                <Label htmlFor="role" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                     I am a
                                 </Label>
                                 <Select
@@ -80,7 +80,7 @@ export default function Register() {
                                     <SelectTrigger
                                         id="role"
                                         tabIndex={3}
-                                        className="h-11 rounded-lg border-[#e3e3e0] bg-white px-4 dark:border-[#3E3E3A] dark:bg-[#161615]"
+                                        className="h-11 rounded-xl border-zinc-200 bg-zinc-50 px-4 dark:border-zinc-700 dark:bg-zinc-800"
                                     >
                                         <SelectValue placeholder="Select your role" />
                                     </SelectTrigger>
@@ -94,7 +94,7 @@ export default function Register() {
 
                             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                                 <div className="grid gap-1.5">
-                                    <Label htmlFor="password" className="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
+                                    <Label htmlFor="password" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                         Password
                                     </Label>
                                     <Input
@@ -105,13 +105,13 @@ export default function Register() {
                                         autoComplete="new-password"
                                         name="password"
                                         placeholder="Password"
-                                        className="h-11 rounded-lg border-[#e3e3e0] bg-white px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-[#3E3E3A] dark:bg-[#161615]"
+                                        className="h-11 rounded-xl border-zinc-200 bg-zinc-50 px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800"
                                     />
                                     <InputError message={errors.password} />
                                 </div>
 
                                 <div className="grid gap-1.5">
-                                    <Label htmlFor="password_confirmation" className="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
+                                    <Label htmlFor="password_confirmation" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                         Confirm password
                                     </Label>
                                     <Input
@@ -122,7 +122,7 @@ export default function Register() {
                                         autoComplete="new-password"
                                         name="password_confirmation"
                                         placeholder="Confirm password"
-                                        className="h-11 rounded-lg border-[#e3e3e0] bg-white px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-[#3E3E3A] dark:bg-[#161615]"
+                                        className="h-11 rounded-xl border-zinc-200 bg-zinc-50 px-4 transition-colors focus:border-emerald-500 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-800"
                                     />
                                     <InputError
                                         message={errors.password_confirmation}
@@ -132,7 +132,7 @@ export default function Register() {
 
                             <Button
                                 type="submit"
-                                className="mt-2 h-11 w-full rounded-lg bg-emerald-600 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md"
+                                className="mt-2 h-11 w-full rounded-xl bg-emerald-600 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition-all hover:bg-emerald-700 hover:shadow-xl hover:shadow-emerald-600/25"
                                 tabIndex={6}
                                 data-test="register-user-button"
                             >
@@ -141,7 +141,7 @@ export default function Register() {
                             </Button>
                         </div>
 
-                        <div className="text-center text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                        <div className="text-center text-sm text-zinc-500 dark:text-zinc-400">
                             Already have an account?{' '}
                             <TextLink
                                 href={login()}

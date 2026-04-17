@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, Bell, BookOpen, ClipboardList, Folder, LayoutGrid, Megaphone, MessageSquare, Settings, Users } from 'lucide-react';
+import { BarChart3, Bell, BookOpen, ClipboardList, LayoutGrid, Megaphone, MessageSquare, Settings, Users } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -119,13 +119,7 @@ function getNavItems(role: UserRole): NavItem[] {
     }
 }
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-];
+const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
     const { auth } = usePage().props;
