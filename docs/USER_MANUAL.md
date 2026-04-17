@@ -645,31 +645,105 @@ Manage your 2FA setup:
 
 > **Important:** Each recovery code can only be used once. Store them in a safe location.
 
-### 5.7 Announcements (Viewing)
+### 5.7 Announcements
+
+#### Viewing Announcements (All Users)
 
 All users can view published announcements:
 
 1. Click **Announcements** in the sidebar
-2. See a list of announcements relevant to your role
-3. **Pinned** announcements appear at the top with a pin indicator
-4. Each announcement shows the title, audience badge, author, and date
-5. Click on any announcement to read the full content
+2. The page header reads **"Announcements"** with the subtitle *"Stay updated with the latest news"*
+3. You'll see a list of announcement cards relevant to your role
+4. **Pinned** announcements appear at the top, indicated by a 📌 pin icon next to the title
+5. Each announcement card displays:
+   - **Title** — The announcement headline (bold)
+   - **Body preview** — A summary of the announcement content
+   - **Date** — When the announcement was published (e.g., "Feb 6, 2026"), shown with a clock icon
+   - **Author** — Who posted the announcement (e.g., "by Admin User")
+   - **Audience badge** — A color-coded badge on the right side indicating the target audience:
+     - **Everyone** (blue) — Visible to all roles
+     - **Students** (green) — Visible to students only
+     - **Teachers** (violet) — Visible to teachers only
+     - **Admins** (amber) — Visible to admins only
+6. Click on any announcement to read the full content
 
-> **Note:** You only see announcements targeted at your role (or "All" audience).
+> **Note:** You only see announcements targeted at your role or set to "Everyone." For example, as a student you will see announcements with the **Everyone** or **Students** audience badge, but not those targeted to Teachers or Admins only.
+
+#### Managing Announcements (Teachers & Admins)
+
+Teachers and admins can create, edit, publish, and delete announcements:
+
+1. From the Announcements page, click **Manage Announcements**
+2. The page header reads **"Manage Announcements"** with the subtitle *"Create and manage announcements"*
+
+**Creating an Announcement:**
+
+1. Click the **+ New Announcement** button (top-right)
+2. A form panel appears with the following fields:
+   - **Title** — Announcement headline (text input)
+   - **Content** — Full announcement body (multi-line text area)
+   - **Target Audience** — Dropdown to select who should see it:
+     - *Everyone* — All users
+     - *Students Only* — Only students
+     - *Teachers Only* — Only teachers
+     - *Admins Only* — Only administrators
+   - **Pin to top** — Checkbox to pin the announcement at the top of the list
+   - **Publish immediately** — Checkbox (checked by default); uncheck to save as draft
+3. Click **Publish** (if publishing immediately) or **Save as Draft** (if not)
+
+> **Important:** When published, notifications are automatically sent to all users in the target audience (both in-app and via email).
+
+**Managing Existing Announcements:**
+
+Each announcement in the management list shows:
+- 📌 Pin icon (if pinned) and title
+- **Draft** badge (gray) if not yet published
+- Body preview (HTML tags stripped)
+- Audience badge (color-coded: blue for Everyone, green for Students, violet for Teachers, amber for Admins)
+- Date published or "Not published" with a clock icon
+- Action buttons on the right:
+  - **Publish** (green send icon) — Only visible for drafts; publishes and sends notifications
+  - **Edit** (pencil icon) — Opens inline edit form to update title, content, audience, and pin status
+  - **Delete** (red trash icon) — Permanently deletes the announcement (with confirmation)
+
+**Editing an Announcement:**
+
+1. Click the **Edit** (pencil) icon on an announcement
+2. The card transforms into an inline edit form with: Title, Content, Target Audience, and Pin to top
+3. Make your changes and click **Save Changes**, or click **Cancel** to discard
+
+**Publishing a Draft:**
+
+1. Find the draft announcement (marked with a gray "Draft" badge)
+2. Click the **Publish** (green send icon) button
+3. The announcement becomes visible to users and notifications are sent
+
+> **Note:** Teachers can only see and manage their own announcements. Admins can see and manage all announcements.
 
 ### 5.8 Forum (Participating)
 
-The community forum is available to all authenticated users:
+The community forum is available to all authenticated users. The page header reads **"Community Forum"** with the subtitle *"Ask questions, share ideas, and connect."*
 
 #### Browsing Threads
 1. Click **Forum** in the sidebar
-2. Browse categories with descriptions and thread counts
-3. View threads sorted by pinned first, then most recent
-4. Filter by **category** using the category dropdown
-5. **Search** threads by keyword
+2. At the top of the page, use the **Search threads...** bar to find threads by keyword, then click **Search**
+3. Below the search bar, **category filter pills** let you filter threads:
+   - **All** (selected by default) — Shows all threads
+   - Category pills display the category name and thread count (e.g., "General Discussion (1)", "Help & Questions (1)", "Study Resources (1)", "Feedback & Suggestions (1)")
+   - Click a category pill to show only threads in that category
+4. Threads are displayed as cards, each showing:
+   - **User avatar** icon on the left
+   - **Title** — The thread title in bold (pinned threads show a 📌 pin icon before the title)
+   - **Body preview** — A truncated preview of the thread content
+   - **Category badge** — Color-coded label (e.g., green for "General Discussion", red for "Help & Questions", orange for "Study Resources", coral for "Feedback & Suggestions")
+   - **Author name** — Shown with a user icon (e.g., "Student User")
+   - **Role badge** — Color-coded badge showing the author's role (green for **student**, blue for **teacher**)
+   - **Reply count** — Number of replies with a comment icon (e.g., "2 replies")
+   - **Date** — When the thread was created, shown with a clock icon (e.g., "Feb 13")
+5. Pinned threads always appear at the top of the list
 
 #### Creating a Thread
-1. Click **New Thread**
+1. Click the **+ New Thread** button (top-right corner, dark button)
 2. Select a **Category** from the dropdown
 3. Enter a **Title** and **Body**
 4. Click **Create Thread**
