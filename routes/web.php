@@ -8,7 +8,9 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\GradebookController;
+use App\Http\Controllers\LearningSessionController;
 use App\Http\Controllers\LibraryController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\ReportController;
@@ -111,6 +113,34 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
 
     Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');
+});
+
+// Learning Sessions routes (teachers & admins for management; all auth for reading)
+Route::middleware(['auth', 'verified'])->prefix('sessions')->name('sessions.')->group(function () {
+    Route::get('/', [LearningSessionController::class, 'index'])->name('index');
+    Route::get('learner/{student}/history', [LearningSessionController::class, 'learnerHistory'])->name('learner.history');
+    Route::get('{session}', [LearningSessionController::class, 'show'])->name('show');
+});
+
+Route::middleware(['auth', 'verified', 'role:teacher,admin'])->prefix('sessions')->name('sessions.')->group(function () {
+    Route::post('/', [LearningSessionController::class, 'store'])->name('store');
+    Route::put('{session}', [LearningSessionController::class, 'update'])->name('update');
+    Route::delete('{session}', [LearningSessionController::class, 'destroy'])->name('destroy');
+    Route::post('{session}/attendance', [LearningSessionController::class, 'markAttendance'])->name('attendance');
+    Route::post('{session}/bulk-absent', [LearningSessionController::class, 'bulkAbsent'])->name('bulk-absent');
+});
+
+// Time tracking (students only)
+Route::middleware(['auth', 'verified', 'role:student'])->group(function () {
+    Route::post('sessions/log-time', [LearningSessionController::class, 'logTime'])->name('sessions.log-time');
+});
+
+// Messages routes (all authenticated users)
+Route::middleware(['auth', 'verified'])->prefix('messages')->name('messages.')->group(function () {
+    Route::get('/', [MessageController::class, 'index'])->name('index');
+    Route::post('/', [MessageController::class, 'store'])->name('store');
+    Route::patch('{message}/read', [MessageController::class, 'markRead'])->name('read');
+    Route::delete('{message}', [MessageController::class, 'destroy'])->name('destroy');
 });
 
 require __DIR__.'/settings.php';

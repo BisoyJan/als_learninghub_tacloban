@@ -92,7 +92,13 @@ class LibraryController extends Controller
 
         return Inertia::render('library/show', [
             'module' => $module,
-            'enrollment' => $enrollment,
+            'enrollment' => $enrollment ? [
+                'id' => $enrollment->id,
+                'status' => $enrollment->status,
+                'completed_at' => $enrollment->completed_at?->toISOString(),
+                'time_spent_seconds' => $enrollment->time_spent_seconds,
+                'time_spent_formatted' => $enrollment->time_spent_formatted,
+            ] : null,
         ]);
     }
 }

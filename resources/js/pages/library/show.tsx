@@ -2,6 +2,7 @@ import { Head, Link } from '@inertiajs/react';
 import {
     ArrowLeft,
     BookOpen,
+    Clock,
     Download,
     ExternalLink,
     FileText,
@@ -9,6 +10,7 @@ import {
     Link2,
     Video,
 } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
@@ -38,8 +40,53 @@ interface Module {
     resources: Resource[];
 }
 
+interface Enrollment {
+    id: number;
+    status: string;
+    completed_at: string | null;
+    time_spent_seconds: number;
+    time_spent_formatted: string;
+}
+
 interface Props {
     module: Module;
+    enrollment: Enrollment | null;
+}
+
+/** Sends a heartbeat to log time spent. Called every 60 s while the page is visible. */
+function useTimeTracking(enrollmentId: number | undefined) {
+    const accRef = useRef(0);
+    const lastSentRef = useRef(Date.now());
+    const INTERVAL_MS = 60_000; // 60 s
+
+    useEffect(() => {
+        if (!enrollmentId) return;
+
+        const tick = setInterval(() => {
+            if (document.visibilityState !== 'visible') return;
+            const seconds = Math.round((Date.now() - lastSentRef.current) / 1000);
+            lastSentRef.current = Date.now();
+            accRef.current += seconds;
+
+            // Fire-and-forget via fetch (no Inertia navigation)
+            fetch('/sessions/log-time', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-XSRF-TOKEN': decodeURIComponent(
+                        document.cookie
+                            .split('; ')
+                            .find((r) => r.startsWith('XSRF-TOKEN='))
+                            ?.split('=')[1] ?? ''
+                    ),
+                },
+                body: JSON.stringify({ enrollment_id: enrollmentId, seconds }),
+            }).catch(() => {/* silent */ });
+        }, INTERVAL_MS);
+
+        return () => clearInterval(tick);
+    }, [enrollmentId]);
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -70,7 +117,8 @@ const typeColors: Record<string, string> = {
     image: 'bg-amber-100 text-amber-600 dark:bg-amber-900/30',
 };
 
-export default function ShowModule({ module }: Props) {
+export default function ShowModule({ module, enrollment }: Props) {
+    useTimeTracking(enrollment?.id);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={module.title} />
@@ -94,6 +142,12 @@ export default function ShowModule({ module }: Props) {
                         <div className="mt-3 flex flex-wrap gap-2">
                             <Badge variant="outline">{module.subject.name}</Badge>
                             <Badge variant="outline">{levelLabels[module.level]}</Badge>
+                            {enrollment && (
+                                <Badge variant="outline" className="flex items-center gap-1 text-muted-foreground">
+                                    <Clock className="size-3" />
+                                    {enrollment.time_spent_formatted} spent
+                                </Badge>
+                            )}
                             <span className="text-xs text-muted-foreground self-center">
                                 by {module.creator.name}
                             </span>

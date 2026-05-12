@@ -16,16 +16,34 @@ class Enrollment extends Model
         'module_id',
         'enrolled_by',
         'status',
+        'time_spent_seconds',
+        'last_accessed_at',
         'completed_at',
     ];
 
-    protected $appends = ['status_label', 'average_score'];
+    protected $appends = ['status_label', 'average_score', 'time_spent_formatted'];
 
     protected function casts(): array
     {
         return [
             'completed_at' => 'datetime',
+            'last_accessed_at' => 'datetime',
+            'time_spent_seconds' => 'integer',
         ];
+    }
+
+    /**
+     * Human-readable time spent (e.g. "2h 15m").
+     */
+    public function getTimeSpentFormattedAttribute(): string
+    {
+        $seconds = (int) $this->time_spent_seconds;
+        if ($seconds < 60) {
+            return '< 1m';
+        }
+        $hours = intdiv($seconds, 3600);
+        $minutes = intdiv($seconds % 3600, 60);
+        return ($hours > 0 ? "{$hours}h " : '') . "{$minutes}m";
     }
 
     /**

@@ -103,4 +103,36 @@ class User extends Authenticatable
             ->withPivot(['enrollment_id', 'earned_at'])
             ->withTimestamps();
     }
+
+    /**
+     * Learning sessions taught by this user (teacher).
+     */
+    public function taughtSessions(): HasMany
+    {
+        return $this->hasMany(\App\Models\LearningSession::class, 'teacher_id');
+    }
+
+    /**
+     * Attendance records for this student.
+     */
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(\App\Models\SessionAttendance::class, 'student_id');
+    }
+
+    /**
+     * Messages received by this user.
+     */
+    public function receivedMessages(): HasMany
+    {
+        return $this->hasMany(\App\Models\Message::class, 'recipient_id');
+    }
+
+    /**
+     * Messages sent by this user.
+     */
+    public function sentMessages(): HasMany
+    {
+        return $this->hasMany(\App\Models\Message::class, 'sender_id');
+    }
 }

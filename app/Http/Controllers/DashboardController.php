@@ -7,6 +7,9 @@ use App\Models\Announcement;
 use App\Models\Enrollment;
 use App\Models\ForumThread;
 use App\Models\LearningModule;
+use App\Models\LearningSession;
+use App\Models\Message;
+use App\Models\SessionAttendance;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -35,6 +38,33 @@ class DashboardController extends Controller
                     'announcements' => Announcement::count(),
                     'forumThreads' => ForumThread::count(),
                 ],
+                'recentMessages' => Message::inbox($user->id)
+                    ->with('sender:id,name,role')
+                    ->latest()
+                    ->take(5)
+                    ->get()
+                    ->map(fn ($m) => [
+                        'id' => $m->id,
+                        'sender' => $m->sender->name,
+                        'sender_role' => $m->sender->role,
+                        'subject' => $m->subject,
+                        'preview' => str()->limit(strip_tags($m->body), 80),
+                        'read' => $m->isRead(),
+                        'created_at' => $m->created_at->diffForHumans(),
+                    ]),
+                'upcomingSessions' => LearningSession::with('module:id,title')
+                    ->where('scheduled_at', '>=', now())
+                    ->where('status', 'upcoming')
+                    ->orderBy('scheduled_at')
+                    ->take(5)
+                    ->get()
+                    ->map(fn ($s) => [
+                        'id' => $s->id,
+                        'title' => $s->title,
+                        'module' => $s->module?->title,
+                        'scheduled_at' => $s->scheduled_at->toISOString(),
+                        'mode_label' => $s->mode_label,
+                    ]),
             ]),
             'teacher' => Inertia::render('dashboard/teacher-dashboard', [
                 'stats' => [
@@ -43,6 +73,34 @@ class DashboardController extends Controller
                     'activeEnrollments' => Enrollment::where('enrolled_by', $user->id)->active()->count(),
                     'forumThreads' => ForumThread::where('user_id', $user->id)->count(),
                 ],
+                'recentMessages' => Message::inbox($user->id)
+                    ->with('sender:id,name,role')
+                    ->latest()
+                    ->take(5)
+                    ->get()
+                    ->map(fn ($m) => [
+                        'id' => $m->id,
+                        'sender' => $m->sender->name,
+                        'sender_role' => $m->sender->role,
+                        'subject' => $m->subject,
+                        'preview' => str()->limit(strip_tags($m->body), 80),
+                        'read' => $m->isRead(),
+                        'created_at' => $m->created_at->diffForHumans(),
+                    ]),
+                'upcomingSessions' => LearningSession::with('module:id,title')
+                    ->where('teacher_id', $user->id)
+                    ->where('scheduled_at', '>=', now())
+                    ->where('status', 'upcoming')
+                    ->orderBy('scheduled_at')
+                    ->take(5)
+                    ->get()
+                    ->map(fn ($s) => [
+                        'id' => $s->id,
+                        'title' => $s->title,
+                        'module' => $s->module?->title,
+                        'scheduled_at' => $s->scheduled_at->toISOString(),
+                        'mode_label' => $s->mode_label,
+                    ]),
             ]),
             default => Inertia::render('dashboard/student-dashboard', [
                 'stats' => [
@@ -51,6 +109,23 @@ class DashboardController extends Controller
                     'completed' => Enrollment::where('student_id', $user->id)->completed()->count(),
                     'announcements' => Announcement::published()->forAudience($user->role)->count(),
                 ],
+                'upcomingSessions' => SessionAttendance::where('student_id', $user->id)
+                    ->join('learning_sessions', 'learning_sessions.id', '=', 'session_attendances.session_id')
+                    ->where('learning_sessions.scheduled_at', '>=', now())
+                    ->where('learning_sessions.status', 'upcoming')
+                    ->orderBy('learning_sessions.scheduled_at')
+                    ->take(5)
+                    ->with('session.module:id,title')
+                    ->get()
+                    ->pluck('session')
+                    ->filter()
+                    ->map(fn ($s) => [
+                        'id' => $s->id,
+                        'title' => $s->title,
+                        'module' => $s->module?->title,
+                        'scheduled_at' => $s->scheduled_at->toISOString(),
+                        'mode_label' => $s->mode_label,
+                    ]),
             ]),
         };
     }
