@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Enrollment;
 use App\Models\LearningModule;
 use App\Models\LearningResource;
 use App\Models\Subject;
@@ -44,7 +45,7 @@ class LibraryTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        LearningModule::create([
+        $published = LearningModule::create([
             'subject_id' => $this->subject->id,
             'created_by' => $admin->id,
             'title' => 'Published Module',
@@ -62,6 +63,14 @@ class LibraryTest extends TestCase
             'status' => 'draft',
         ]);
 
+        // Enroll student in the published module so it appears in their library
+        Enrollment::create([
+            'student_id' => $this->student->id,
+            'module_id' => $published->id,
+            'enrolled_by' => $admin->id,
+            'status' => 'enrolled',
+        ]);
+
         $response = $this->actingAs($this->student)->get(route('library.index'));
 
         $response->assertInertia(fn ($page) => $page
@@ -74,7 +83,7 @@ class LibraryTest extends TestCase
         $admin = User::factory()->create(['role' => 'admin']);
         $otherSubject = Subject::create(['name' => 'Science', 'slug' => 'science']);
 
-        LearningModule::create([
+        $englishModule = LearningModule::create([
             'subject_id' => $this->subject->id,
             'created_by' => $admin->id,
             'title' => 'English Module',
@@ -83,7 +92,7 @@ class LibraryTest extends TestCase
             'status' => 'published',
         ]);
 
-        LearningModule::create([
+        $scienceModule = LearningModule::create([
             'subject_id' => $otherSubject->id,
             'created_by' => $admin->id,
             'title' => 'Science Module',
@@ -91,6 +100,10 @@ class LibraryTest extends TestCase
             'level' => 'elementary',
             'status' => 'published',
         ]);
+
+        // Enroll student in both modules so they appear in their library
+        Enrollment::create(['student_id' => $this->student->id, 'module_id' => $englishModule->id, 'enrolled_by' => $admin->id, 'status' => 'enrolled']);
+        Enrollment::create(['student_id' => $this->student->id, 'module_id' => $scienceModule->id, 'enrolled_by' => $admin->id, 'status' => 'enrolled']);
 
         $response = $this->actingAs($this->student)
             ->get(route('library.index', ['subject' => $this->subject->id]));
@@ -104,7 +117,7 @@ class LibraryTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        LearningModule::create([
+        $grammarModule = LearningModule::create([
             'subject_id' => $this->subject->id,
             'created_by' => $admin->id,
             'title' => 'Basic Grammar',
@@ -113,7 +126,7 @@ class LibraryTest extends TestCase
             'status' => 'published',
         ]);
 
-        LearningModule::create([
+        $vocabModule = LearningModule::create([
             'subject_id' => $this->subject->id,
             'created_by' => $admin->id,
             'title' => 'Advanced Vocabulary',
@@ -121,6 +134,10 @@ class LibraryTest extends TestCase
             'level' => 'junior_high',
             'status' => 'published',
         ]);
+
+        // Enroll student in both modules so they appear in their library
+        Enrollment::create(['student_id' => $this->student->id, 'module_id' => $grammarModule->id, 'enrolled_by' => $admin->id, 'status' => 'enrolled']);
+        Enrollment::create(['student_id' => $this->student->id, 'module_id' => $vocabModule->id, 'enrolled_by' => $admin->id, 'status' => 'enrolled']);
 
         $response = $this->actingAs($this->student)
             ->get(route('library.index', ['search' => 'Grammar']));
@@ -141,6 +158,14 @@ class LibraryTest extends TestCase
             'slug' => 'viewable-module',
             'level' => 'elementary',
             'status' => 'published',
+        ]);
+
+        // Enroll student so they can access the module
+        Enrollment::create([
+            'student_id' => $this->student->id,
+            'module_id' => $module->id,
+            'enrolled_by' => $admin->id,
+            'status' => 'enrolled',
         ]);
 
         $response = $this->actingAs($this->student)->get(route('library.show', $module));
