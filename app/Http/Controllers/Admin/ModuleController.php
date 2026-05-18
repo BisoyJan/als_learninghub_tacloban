@@ -21,7 +21,13 @@ class ModuleController extends Controller
      */
     public function index(Request $request): Response
     {
+        $user = $request->user();
         $query = LearningModule::with(['subject', 'creator', 'resources']);
+
+        // Teachers only see modules they created
+        if ($user->isTeacher()) {
+            $query->where('created_by', $user->id);
+        }
 
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
@@ -91,6 +97,11 @@ class ModuleController extends Controller
      */
     public function show(LearningModule $module): Response
     {
+        $user = request()->user();
+        if ($user->isTeacher() && $module->created_by !== $user->id) {
+            abort(403);
+        }
+
         $module->load(['subject', 'creator', 'resources.uploader']);
 
         return Inertia::render('admin/modules/show', [
@@ -103,6 +114,11 @@ class ModuleController extends Controller
      */
     public function edit(LearningModule $module): Response
     {
+        $user = request()->user();
+        if ($user->isTeacher() && $module->created_by !== $user->id) {
+            abort(403);
+        }
+
         return Inertia::render('admin/modules/edit', [
             'module' => $module->load('resources'),
             'subjects' => Subject::orderBy('name')->get(),
@@ -114,6 +130,11 @@ class ModuleController extends Controller
      */
     public function update(Request $request, LearningModule $module): RedirectResponse
     {
+        $user = $request->user();
+        if ($user->isTeacher() && $module->created_by !== $user->id) {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
@@ -134,6 +155,11 @@ class ModuleController extends Controller
      */
     public function destroy(LearningModule $module): RedirectResponse
     {
+        $user = request()->user();
+        if ($user->isTeacher() && $module->created_by !== $user->id) {
+            abort(403);
+        }
+
         // Delete associated resource files
         foreach ($module->resources as $resource) {
             if ($resource->file_path) {
@@ -153,6 +179,11 @@ class ModuleController extends Controller
      */
     public function uploadResource(Request $request, LearningModule $module): RedirectResponse
     {
+        $user = $request->user();
+        if ($user->isTeacher() && $module->created_by !== $user->id) {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
@@ -192,6 +223,11 @@ class ModuleController extends Controller
      */
     public function deleteResource(LearningModule $module, LearningResource $resource): RedirectResponse
     {
+        $user = request()->user();
+        if ($user->isTeacher() && $module->created_by !== $user->id) {
+            abort(403);
+        }
+
         if ($resource->file_path) {
             Storage::disk('public')->delete($resource->file_path);
         }

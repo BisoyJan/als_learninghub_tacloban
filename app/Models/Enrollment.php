@@ -101,7 +101,7 @@ class Enrollment extends Model
             ->whereNotNull('score')
             ->avg('score');
 
-        return $avg !== null ? round((float) $avg, 1) : null;
+        return $avg !== null ? round((float) $avg, 0) : null;
     }
 
     /**

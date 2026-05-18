@@ -23,8 +23,8 @@ class ProgressRecord extends Model
     protected function casts(): array
     {
         return [
-            'score' => 'decimal:2',
-            'max_score' => 'decimal:2',
+            'score' => 'float',
+            'max_score' => 'float',
             'recorded_date' => 'date',
         ];
     }

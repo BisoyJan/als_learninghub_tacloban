@@ -34,7 +34,7 @@ class ProgressController extends Controller
             return $enrollment->progressRecords->whereNotNull('score')->pluck('score');
         });
         if ($allScores->count() > 0) {
-            $averageScore = round($allScores->avg(), 1);
+            $averageScore = round($allScores->avg(), 0);
         }
 
         // Get user's badges

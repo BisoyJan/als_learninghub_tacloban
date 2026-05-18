@@ -29,6 +29,7 @@ export default function CreateUser() {
         password_confirmation: '',
         role: 'student',
         is_active: true,
+        education_level: '',
     });
 
     function handleSubmit(e: React.FormEvent) {
@@ -92,7 +93,10 @@ export default function CreateUser() {
                                 <Label htmlFor="role">Role</Label>
                                 <Select
                                     value={data.role}
-                                    onValueChange={(value) => setData('role', value)}
+                                    onValueChange={(value) => {
+                                        setData('role', value);
+                                        if (value !== 'student') setData('education_level', '');
+                                    }}
                                 >
                                     <SelectTrigger id="role">
                                         <SelectValue placeholder="Select role" />
@@ -105,6 +109,26 @@ export default function CreateUser() {
                                 </Select>
                                 <InputError message={errors.role} />
                             </div>
+
+                            {data.role === 'student' && (
+                                <div className="grid gap-2">
+                                    <Label htmlFor="education_level">Education Level</Label>
+                                    <Select
+                                        value={data.education_level}
+                                        onValueChange={(value) => setData('education_level', value)}
+                                    >
+                                        <SelectTrigger id="education_level">
+                                            <SelectValue placeholder="Select education level" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="elementary">Elementary</SelectItem>
+                                            <SelectItem value="junior_high">Junior High School</SelectItem>
+                                            <SelectItem value="senior_high">Senior High School</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError message={errors.education_level} />
+                                </div>
+                            )}
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password">Password</Label>

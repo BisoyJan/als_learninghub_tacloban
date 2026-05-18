@@ -17,7 +17,16 @@ class LibraryController extends Controller
      */
     public function index(Request $request): Response
     {
+        $user = $request->user();
         $query = LearningModule::published()->with(['subject', 'creator', 'resources']);
+
+        // Students only see modules they have been enrolled in by a teacher
+        if ($user && $user->isStudent()) {
+            $enrolledModuleIds = Enrollment::where('student_id', $user->id)
+                ->active()
+                ->pluck('module_id');
+            $query->whereIn('id', $enrolledModuleIds);
+        }
 
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
@@ -46,7 +55,6 @@ class LibraryController extends Controller
             ->withQueryString();
 
         // Get current user's enrollment statuses for each module
-        $user = $request->user();
         $enrollmentMap = [];
         if ($user) {
             $enrollments = Enrollment::where('student_id', $user->id)
@@ -78,6 +86,17 @@ class LibraryController extends Controller
         $user = request()->user();
         if ($module->status !== 'published' && $user->isStudent()) {
             abort(403, 'This module is not yet available.');
+        }
+
+        // Students can only view modules they have been enrolled in
+        if ($user->isStudent()) {
+            $enrolled = Enrollment::where('student_id', $user->id)
+                ->where('module_id', $module->id)
+                ->active()
+                ->exists();
+            if (!$enrolled) {
+                abort(403, 'You have not been enrolled in this module.');
+            }
         }
 
         $module->load(['subject', 'creator', 'resources.uploader']);

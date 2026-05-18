@@ -56,7 +56,7 @@ function getNavItems(role: UserRole): NavItem[] {
         },
         {
             title: 'Modules',
-            href: '/library',
+            href: '/admin/modules',
             icon: BookOpen,
         },
         {

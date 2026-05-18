@@ -27,6 +27,7 @@ import type { BreadcrumbItem } from '@/types';
 interface Module {
     id: number;
     title: string;
+    level: string;
     level_label: string;
     subject: { id: number; name: string } | null;
 }
@@ -35,6 +36,7 @@ interface Student {
     id: number;
     name: string;
     email: string;
+    education_level: string | null;
 }
 
 interface ProgressRecord {
@@ -98,6 +100,12 @@ export default function GradebookIndex({ enrollments, modules, students, filters
     const [statusFilter, setStatusFilter] = useState(filters.status || '');
     const [showEnroll, setShowEnroll] = useState(false);
     const [enrollForm, setEnrollForm] = useState({ student_id: '', module_id: '' });
+
+    // Filter available modules based on selected student's education level
+    const selectedStudent = students.find((s) => String(s.id) === enrollForm.student_id);
+    const filteredModules = selectedStudent?.education_level
+        ? modules.filter((m) => m.level === selectedStudent.education_level)
+        : modules;
     const [enrolling, setEnrolling] = useState(false);
     const flash = usePage().props.flash as { success?: string; error?: string } | undefined;
 
@@ -181,7 +189,7 @@ export default function GradebookIndex({ enrollments, modules, students, filters
                                 </Label>
                                 <Select
                                     value={enrollForm.student_id}
-                                    onValueChange={(v) => setEnrollForm({ ...enrollForm, student_id: v })}
+                                    onValueChange={(v) => setEnrollForm({ ...enrollForm, student_id: v, module_id: '' })}
                                 >
                                     <SelectTrigger id="enroll-student">
                                         <SelectValue placeholder="Select student..." />
@@ -207,7 +215,7 @@ export default function GradebookIndex({ enrollments, modules, students, filters
                                         <SelectValue placeholder="Select module..." />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {modules.map((m) => (
+                                        {filteredModules.map((m) => (
                                             <SelectItem key={m.id} value={String(m.id)}>
                                                 {m.title} ({m.subject?.name})
                                             </SelectItem>

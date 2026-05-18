@@ -69,6 +69,7 @@ class UserController extends Controller
             'password' => ['required', 'string', Password::defaults(), 'confirmed'],
             'role' => ['required', Rule::in(['admin', 'teacher', 'student'])],
             'is_active' => ['boolean'],
+            'education_level' => ['nullable', Rule::in(['elementary', 'junior_high', 'senior_high'])],
         ]);
 
         User::create([
@@ -77,6 +78,7 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
             'is_active' => $validated['is_active'] ?? true,
+            'education_level' => $validated['role'] === 'student' ? ($validated['education_level'] ?? null) : null,
         ]);
 
         return redirect()
@@ -90,7 +92,7 @@ class UserController extends Controller
     public function edit(User $user): Response
     {
         return Inertia::render('admin/users/edit', [
-            'editUser' => $user->only('id', 'name', 'email', 'role', 'is_active', 'created_at'),
+            'editUser' => $user->only('id', 'name', 'email', 'role', 'is_active', 'education_level', 'created_at'),
         ]);
     }
 
@@ -105,12 +107,14 @@ class UserController extends Controller
             'password' => ['nullable', 'string', Password::defaults(), 'confirmed'],
             'role' => ['required', Rule::in(['admin', 'teacher', 'student'])],
             'is_active' => ['boolean'],
+            'education_level' => ['nullable', Rule::in(['elementary', 'junior_high', 'senior_high'])],
         ]);
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
         $user->role = $validated['role'];
         $user->is_active = $validated['is_active'] ?? true;
+        $user->education_level = $validated['role'] === 'student' ? ($validated['education_level'] ?? null) : null;
 
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);

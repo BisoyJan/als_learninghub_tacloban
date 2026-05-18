@@ -359,7 +359,7 @@ export default function ProgressShow({ enrollment }: Props) {
                                         <TableCell>
                                             {record.score !== null ? (
                                                 <span className="font-semibold">
-                                                    {record.score}{record.max_score ? `/${record.max_score}` : ''}
+                                                    {Math.round(Number(record.score))}{record.max_score ? `/${Math.round(Number(record.max_score))}` : ''}
                                                     {record.percentage && (
                                                         <span className="ml-1 text-xs text-muted-foreground">
                                                             ({record.percentage})

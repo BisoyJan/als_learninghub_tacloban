@@ -13,10 +13,10 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem, User, UserRole } from '@/types';
+import type { BreadcrumbItem, User, UserRole, EducationLevel } from '@/types';
 
 interface Props {
-    editUser: Pick<User, 'id' | 'name' | 'email' | 'role' | 'is_active' | 'created_at'>;
+    editUser: Pick<User, 'id' | 'name' | 'email' | 'role' | 'is_active' | 'education_level' | 'created_at'>;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -33,6 +33,7 @@ export default function EditUser({ editUser }: Props) {
         password_confirmation: '',
         role: editUser.role,
         is_active: editUser.is_active,
+        education_level: (editUser.education_level ?? '') as EducationLevel | '',
     });
 
     function handleSubmit(e: React.FormEvent) {
@@ -96,7 +97,10 @@ export default function EditUser({ editUser }: Props) {
                                 <Label htmlFor="role">Role</Label>
                                 <Select
                                     value={data.role}
-                                    onValueChange={(value) => setData('role', value as UserRole)}
+                                    onValueChange={(value) => {
+                                        setData('role', value as UserRole);
+                                        if (value !== 'student') setData('education_level', '');
+                                    }}
                                 >
                                     <SelectTrigger id="role">
                                         <SelectValue placeholder="Select role" />
@@ -109,6 +113,26 @@ export default function EditUser({ editUser }: Props) {
                                 </Select>
                                 <InputError message={errors.role} />
                             </div>
+
+                            {data.role === 'student' && (
+                                <div className="grid gap-2">
+                                    <Label htmlFor="education_level">Education Level</Label>
+                                    <Select
+                                        value={data.education_level}
+                                        onValueChange={(value) => setData('education_level', value as EducationLevel)}
+                                    >
+                                        <SelectTrigger id="education_level">
+                                            <SelectValue placeholder="Select education level" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="elementary">Elementary</SelectItem>
+                                            <SelectItem value="junior_high">Junior High School</SelectItem>
+                                            <SelectItem value="senior_high">Senior High School</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError message={errors.education_level} />
+                                </div>
+                            )}
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password">

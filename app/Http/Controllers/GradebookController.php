@@ -117,7 +117,7 @@ class GradebookController extends Controller
         $students = User::where('role', 'student')
             ->where('is_active', true)
             ->orderBy('name')
-            ->get(['id', 'name', 'email']);
+            ->get(['id', 'name', 'email', 'education_level']);
 
         return Inertia::render('gradebook/index', [
             'enrollments' => $enrollments,

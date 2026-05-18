@@ -97,7 +97,7 @@ Route::middleware(['auth', 'verified'])->prefix('notifications')->name('notifica
     Route::get('unread-count', [NotificationController::class, 'unreadCount'])->name('unread-count');
 });
 
-// Admin routes
+// Admin-only routes (user management, settings, reports)
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('users', UserController::class);
     Route::patch('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
@@ -105,14 +105,17 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::post('users-import', [UserController::class, 'import'])->name('users.import');
     Route::get('users-template', [UserController::class, 'template'])->name('users.template');
 
-    Route::resource('modules', ModuleController::class);
-    Route::post('modules/{module}/resources', [ModuleController::class, 'uploadResource'])->name('modules.resources.store');
-    Route::delete('modules/{module}/resources/{resource}', [ModuleController::class, 'deleteResource'])->name('modules.resources.destroy');
-
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
 
     Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');
+});
+
+// Module management routes (teachers & admins)
+Route::middleware(['auth', 'verified', 'role:teacher,admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('modules', ModuleController::class);
+    Route::post('modules/{module}/resources', [ModuleController::class, 'uploadResource'])->name('modules.resources.store');
+    Route::delete('modules/{module}/resources/{resource}', [ModuleController::class, 'deleteResource'])->name('modules.resources.destroy');
 });
 
 // Learning Sessions routes (teachers & admins for management; all auth for reading)
