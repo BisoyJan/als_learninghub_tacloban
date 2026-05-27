@@ -137,6 +137,16 @@ class GradebookController extends Controller
             'module_id' => ['required', 'exists:learning_modules,id'],
         ]);
 
+        $user = $request->user();
+
+        // Teachers can only enroll students into modules they created
+        if ($user->isTeacher()) {
+            $module = LearningModule::find($validated['module_id']);
+            if (! $module || $module->created_by !== $user->id) {
+                abort(403, 'You can only enroll students into your own modules.');
+            }
+        }
+
         // Check if already enrolled
         $existing = Enrollment::where('student_id', $validated['student_id'])
             ->where('module_id', $validated['module_id'])
@@ -149,7 +159,7 @@ class GradebookController extends Controller
         Enrollment::create([
             'student_id' => $validated['student_id'],
             'module_id' => $validated['module_id'],
-            'enrolled_by' => $request->user()->id,
+            'enrolled_by' => $user->id,
             'status' => 'enrolled',
         ]);
 
