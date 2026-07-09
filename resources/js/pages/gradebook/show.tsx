@@ -26,6 +26,7 @@ import type { BreadcrumbItem } from '@/types';
 interface Subject {
     id: number;
     name: string;
+    strand_label: string | null;
 }
 
 interface Resource {
@@ -64,9 +65,24 @@ interface ProgressRecord {
     score: number | null;
     max_score: number | null;
     percentage: string | null;
+    competency_level: string | null;
+    competency_descriptor: string | null;
     remarks: string | null;
     recorded_date: string;
     recorded_by: RecordedBy;
+}
+
+interface AeResult {
+    id: number;
+    level: string;
+    level_label: string;
+    test_date: string;
+    overall_score: number | null;
+    result: string;
+    result_label: string;
+    certificate_no: string | null;
+    remarks: string | null;
+    recorded_by: RecordedBy | null;
 }
 
 interface Enrollment {
@@ -83,6 +99,7 @@ interface Enrollment {
 
 interface Props {
     enrollment: Enrollment;
+    aeResults: AeResult[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -104,7 +121,14 @@ const typeColors: Record<string, string> = {
     milestone: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
 };
 
-export default function GradebookShow({ enrollment }: Props) {
+const competencyColors: Record<string, string> = {
+    Mastered: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 border-green-200 dark:border-green-800',
+    Proficient: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300 border-teal-200 dark:border-teal-800',
+    Developing: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+    Beginning: 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300 border-rose-200 dark:border-rose-800',
+};
+
+export default function GradebookShow({ enrollment, aeResults }: Props) {
     const [showAddRecord, setShowAddRecord] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [recordForm, setRecordForm] = useState({
@@ -112,8 +136,19 @@ export default function GradebookShow({ enrollment }: Props) {
         type: 'activity' as 'assessment' | 'activity' | 'milestone',
         score: '',
         max_score: '',
+        competency_level: 'auto' as 'auto' | 'beginning' | 'developing' | 'proficient' | 'mastered',
         remarks: '',
         recorded_date: new Date().toISOString().split('T')[0],
+    });
+    const [showAddAe, setShowAddAe] = useState(false);
+    const [aeProcessing, setAeProcessing] = useState(false);
+    const [aeForm, setAeForm] = useState({
+        level: 'junior_high' as 'elementary' | 'junior_high',
+        test_date: new Date().toISOString().split('T')[0],
+        overall_score: '',
+        result: 'passed' as 'passed' | 'failed',
+        certificate_no: '',
+        remarks: '',
     });
     const flash = usePage().props.flash as { success?: string; error?: string } | undefined;
 
@@ -124,6 +159,7 @@ export default function GradebookShow({ enrollment }: Props) {
             ...recordForm,
             score: recordForm.score ? Number(recordForm.score) : null,
             max_score: recordForm.max_score ? Number(recordForm.max_score) : null,
+            competency_level: recordForm.competency_level === 'auto' ? null : recordForm.competency_level,
         }, {
             onFinish: () => setProcessing(false),
             onSuccess: () => {
@@ -133,11 +169,40 @@ export default function GradebookShow({ enrollment }: Props) {
                     type: 'activity',
                     score: '',
                     max_score: '',
+                    competency_level: 'auto',
                     remarks: '',
                     recorded_date: new Date().toISOString().split('T')[0],
                 });
             },
         });
+    }
+
+    function handleAddAeResult(e: React.FormEvent) {
+        e.preventDefault();
+        setAeProcessing(true);
+        router.post(`/gradebook/${enrollment.id}/ae-results`, {
+            ...aeForm,
+            overall_score: aeForm.overall_score ? Number(aeForm.overall_score) : null,
+        }, {
+            onFinish: () => setAeProcessing(false),
+            onSuccess: () => {
+                setShowAddAe(false);
+                setAeForm({
+                    level: 'junior_high',
+                    test_date: new Date().toISOString().split('T')[0],
+                    overall_score: '',
+                    result: 'passed',
+                    certificate_no: '',
+                    remarks: '',
+                });
+            },
+        });
+    }
+
+    function handleDeleteAeResult(result: AeResult) {
+        if (confirm(`Delete the ${result.level_label} A&E result? This cannot be undone.`)) {
+            router.delete(`/gradebook/${enrollment.id}/ae-results/${result.id}`);
+        }
     }
 
     function handleDeleteRecord(record: ProgressRecord) {
@@ -219,7 +284,9 @@ export default function GradebookShow({ enrollment }: Props) {
                         <p className="mb-3 text-sm text-muted-foreground">{enrollment.module.description}</p>
                         <div className="flex flex-wrap gap-2">
                             {enrollment.module.subject && (
-                                <Badge variant="outline">{enrollment.module.subject.name}</Badge>
+                                <Badge variant="outline">
+                                    {enrollment.module.subject.strand_label ?? enrollment.module.subject.name}
+                                </Badge>
                             )}
                             <Badge variant="outline">{enrollment.module.level_label}</Badge>
                             <Badge variant="outline" className={statusColors[enrollment.status]}>
@@ -354,6 +421,26 @@ export default function GradebookShow({ enrollment }: Props) {
                                         placeholder="Optional notes..."
                                     />
                                 </div>
+                                <div>
+                                    <Label htmlFor="record-competency">
+                                        Competency
+                                    </Label>
+                                    <Select
+                                        value={recordForm.competency_level}
+                                        onValueChange={(value) => setRecordForm({ ...recordForm, competency_level: value as typeof recordForm.competency_level })}
+                                    >
+                                        <SelectTrigger id="record-competency">
+                                            <SelectValue placeholder="Auto from score" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="auto">Auto (from score)</SelectItem>
+                                            <SelectItem value="mastered">Mastered (90-100)</SelectItem>
+                                            <SelectItem value="proficient">Proficient (80-89)</SelectItem>
+                                            <SelectItem value="developing">Developing (75-79)</SelectItem>
+                                            <SelectItem value="beginning">Beginning (&lt;75)</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
                             <div className="flex justify-end">
                                 <Button type="submit" disabled={processing}>
@@ -373,6 +460,7 @@ export default function GradebookShow({ enrollment }: Props) {
                                 <TableHead>Title</TableHead>
                                 <TableHead>Type</TableHead>
                                 <TableHead>Score</TableHead>
+                                <TableHead>Competency</TableHead>
                                 <TableHead>Date</TableHead>
                                 <TableHead>Recorded By</TableHead>
                                 <TableHead>Remarks</TableHead>
@@ -382,7 +470,7 @@ export default function GradebookShow({ enrollment }: Props) {
                         <TableBody>
                             {enrollment.progress_records.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={7} className="py-12 text-center">
+                                    <TableCell colSpan={8} className="py-12 text-center">
                                         <div className="flex flex-col items-center gap-2">
                                             <Clock className="size-8 text-muted-foreground" />
                                             <p className="text-muted-foreground">No progress records yet.</p>
@@ -415,6 +503,15 @@ export default function GradebookShow({ enrollment }: Props) {
                                                 <span className="text-muted-foreground">—</span>
                                             )}
                                         </TableCell>
+                                        <TableCell>
+                                            {record.competency_descriptor ? (
+                                                <Badge variant="outline" className={competencyColors[record.competency_descriptor] ?? ''}>
+                                                    {record.competency_descriptor}
+                                                </Badge>
+                                            ) : (
+                                                <span className="text-muted-foreground">—</span>
+                                            )}
+                                        </TableCell>
                                         <TableCell className="text-muted-foreground">
                                             {new Date(record.recorded_date).toLocaleDateString('en-US', {
                                                 year: 'numeric',
@@ -435,6 +532,191 @@ export default function GradebookShow({ enrollment }: Props) {
                                                 onClick={() => handleDeleteRecord(record)}
                                                 className="text-destructive hover:text-destructive"
                                                 title="Delete record"
+                                            >
+                                                <Trash2 className="size-4" />
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+
+                {/* A&E Test Results */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">A&amp;E Test Results</h2>
+                        <p className="text-xs text-muted-foreground">
+                            Accreditation &amp; Equivalency certification for {enrollment.student.name}.
+                        </p>
+                    </div>
+                    <Button onClick={() => setShowAddAe(!showAddAe)} variant={showAddAe ? 'secondary' : 'default'}>
+                        {showAddAe ? <X className="size-4" /> : <Plus className="size-4" />}
+                        {showAddAe ? 'Cancel' : 'Record A&E Result'}
+                    </Button>
+                </div>
+
+                {showAddAe && (
+                    <div className="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
+                        <form onSubmit={handleAddAeResult} className="space-y-4">
+                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                <div>
+                                    <Label htmlFor="ae-level">
+                                        Level <span className="text-red-500">*</span>
+                                    </Label>
+                                    <Select
+                                        value={aeForm.level}
+                                        onValueChange={(value) => setAeForm({ ...aeForm, level: value as 'elementary' | 'junior_high' })}
+                                    >
+                                        <SelectTrigger id="ae-level">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="elementary">Elementary</SelectItem>
+                                            <SelectItem value="junior_high">Junior High School</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div>
+                                    <Label htmlFor="ae-result">
+                                        Result <span className="text-red-500">*</span>
+                                    </Label>
+                                    <Select
+                                        value={aeForm.result}
+                                        onValueChange={(value) => setAeForm({ ...aeForm, result: value as 'passed' | 'failed' })}
+                                    >
+                                        <SelectTrigger id="ae-result">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="passed">Passed</SelectItem>
+                                            <SelectItem value="failed">Failed</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div>
+                                    <Label htmlFor="ae-date">
+                                        Test Date <span className="text-red-500">*</span>
+                                    </Label>
+                                    <Input
+                                        id="ae-date"
+                                        type="date"
+                                        value={aeForm.test_date}
+                                        onChange={(e) => setAeForm({ ...aeForm, test_date: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="ae-score">
+                                        Overall Score
+                                    </Label>
+                                    <Input
+                                        id="ae-score"
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        max="100"
+                                        value={aeForm.overall_score}
+                                        onChange={(e) => setAeForm({ ...aeForm, overall_score: e.target.value })}
+                                        placeholder="e.g. 85"
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <Label htmlFor="ae-cert">
+                                        Certificate No.
+                                    </Label>
+                                    <Input
+                                        id="ae-cert"
+                                        value={aeForm.certificate_no}
+                                        onChange={(e) => setAeForm({ ...aeForm, certificate_no: e.target.value })}
+                                        placeholder="Optional"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="ae-remarks">
+                                        Remarks
+                                    </Label>
+                                    <Input
+                                        id="ae-remarks"
+                                        value={aeForm.remarks}
+                                        onChange={(e) => setAeForm({ ...aeForm, remarks: e.target.value })}
+                                        placeholder="Optional notes..."
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex justify-end">
+                                <Button type="submit" disabled={aeProcessing}>
+                                    <Plus className="size-4" />
+                                    {aeProcessing ? 'Saving...' : 'Save Result'}
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+
+                <div className="rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Level</TableHead>
+                                <TableHead>Result</TableHead>
+                                <TableHead>Score</TableHead>
+                                <TableHead>Test Date</TableHead>
+                                <TableHead>Certificate No.</TableHead>
+                                <TableHead>Remarks</TableHead>
+                                <TableHead className="text-right">Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {aeResults.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={7} className="py-10 text-center">
+                                        <div className="flex flex-col items-center gap-2">
+                                            <GraduationCap className="size-8 text-muted-foreground" />
+                                            <p className="text-muted-foreground">No A&E test results recorded.</p>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                aeResults.map((result) => (
+                                    <TableRow key={result.id}>
+                                        <TableCell className="font-medium">{result.level_label}</TableCell>
+                                        <TableCell>
+                                            <Badge
+                                                variant="outline"
+                                                className={result.result === 'passed'
+                                                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 border-green-200 dark:border-green-800'
+                                                    : 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300 border-rose-200 dark:border-rose-800'}
+                                            >
+                                                {result.result_label}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            {result.overall_score !== null ? `${result.overall_score}%` : '—'}
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground">
+                                            {new Date(result.test_date).toLocaleDateString('en-US', {
+                                                year: 'numeric',
+                                                month: 'short',
+                                                day: 'numeric',
+                                            })}
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground text-sm">
+                                            {result.certificate_no || '—'}
+                                        </TableCell>
+                                        <TableCell className="max-w-50 truncate text-xs text-muted-foreground">
+                                            {result.remarks || '—'}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => handleDeleteAeResult(result)}
+                                                className="text-destructive hover:text-destructive"
+                                                title="Delete result"
                                             >
                                                 <Trash2 className="size-4" />
                                             </Button>

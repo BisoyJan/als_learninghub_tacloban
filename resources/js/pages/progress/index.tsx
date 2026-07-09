@@ -9,6 +9,7 @@ import type { BreadcrumbItem } from '@/types';
 interface Subject {
     id: number;
     name: string;
+    strand_label: string | null;
 }
 
 interface Module {
@@ -51,10 +52,22 @@ interface Stats {
     averageScore: number | null;
 }
 
+interface AeResult {
+    id: number;
+    level: string;
+    level_label: string;
+    test_date: string;
+    overall_score: number | null;
+    result: string;
+    result_label: string;
+    certificate_no: string | null;
+}
+
 interface Props {
     enrollments: Enrollment[];
     stats: Stats;
     badges: UserBadge[];
+    aeResults: AeResult[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -87,7 +100,7 @@ const badgeColors: Record<string, string> = {
     yellow: 'bg-yellow-100 text-yellow-600 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800',
 };
 
-export default function ProgressIndex({ enrollments, stats, badges }: Props) {
+export default function ProgressIndex({ enrollments, stats, badges, aeResults }: Props) {
     const STATUS_COLORS: Record<string, string> = {
         enrolled: '#3b82f6',
         in_progress: '#f59e0b',
@@ -150,6 +163,49 @@ export default function ProgressIndex({ enrollments, stats, badges }: Props) {
                         color="text-purple-600 bg-purple-100 dark:bg-purple-900/30"
                     />
                 </div>
+
+                {/* A&E Certification Status */}
+                {aeResults.length > 0 && (
+                    <div className="rounded-xl border border-sidebar-border/70 p-5 dark:border-sidebar-border">
+                        <div className="mb-4 flex items-center gap-2">
+                            <GraduationCap className="size-5 text-green-600" />
+                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                A&amp;E Certification
+                            </h2>
+                        </div>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                            {aeResults.map((result) => (
+                                <div
+                                    key={result.id}
+                                    className="flex items-center justify-between rounded-lg border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                                >
+                                    <div>
+                                        <p className="font-medium text-gray-900 dark:text-white">{result.level_label}</p>
+                                        <p className="text-xs text-muted-foreground">
+                                            {new Date(result.test_date).toLocaleDateString('en-US', {
+                                                year: 'numeric', month: 'short', day: 'numeric',
+                                            })}
+                                            {result.certificate_no ? ` · Cert. ${result.certificate_no}` : ''}
+                                        </p>
+                                    </div>
+                                    <div className="text-right">
+                                        <Badge
+                                            variant="outline"
+                                            className={result.result === 'passed'
+                                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 border-green-200 dark:border-green-800'
+                                                : 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300 border-rose-200 dark:border-rose-800'}
+                                        >
+                                            {result.result_label}
+                                        </Badge>
+                                        {result.overall_score !== null && (
+                                            <p className="mt-1 text-xs text-muted-foreground">{result.overall_score}%</p>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Badges Section */}
                 {badges.length > 0 && (
@@ -268,7 +324,7 @@ export default function ProgressIndex({ enrollments, stats, badges }: Props) {
                                 <div className="flex flex-wrap gap-2 mb-3">
                                     {enrollment.module.subject && (
                                         <span className="text-xs text-muted-foreground">
-                                            {enrollment.module.subject.name}
+                                            {enrollment.module.subject.strand_label ?? enrollment.module.subject.name}
                                         </span>
                                     )}
                                     <span className="text-xs text-muted-foreground">•</span>

@@ -96,6 +96,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get ALS A&E test results for this learner.
+     */
+    public function aeTestResults(): HasMany
+    {
+        return $this->hasMany(\App\Models\AeTestResult::class, 'student_id')->orderBy('test_date', 'desc');
+    }
+
+    /**
      * Get badges earned by this user.
      */
     public function badges(): BelongsToMany

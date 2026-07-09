@@ -60,6 +60,7 @@ class ProgressController extends Controller
                 'averageScore' => $averageScore,
             ],
             'badges' => $badges,
+            'aeResults' => $user->aeTestResults()->get(),
         ]);
     }
 

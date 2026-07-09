@@ -43,6 +43,8 @@ Route::middleware(['auth', 'verified', 'role:teacher,admin'])->prefix('gradebook
     Route::post('{enrollment}/records', [GradebookController::class, 'addRecord'])->name('records.store');
     Route::delete('{enrollment}/records/{record}', [GradebookController::class, 'deleteRecord'])->name('records.destroy');
     Route::patch('{enrollment}/status', [GradebookController::class, 'updateStatus'])->name('status');
+    Route::post('{enrollment}/ae-results', [GradebookController::class, 'storeAeResult'])->name('ae-results.store');
+    Route::delete('{enrollment}/ae-results/{aeResult}', [GradebookController::class, 'deleteAeResult'])->name('ae-results.destroy');
 });
 
 // Student progress routes

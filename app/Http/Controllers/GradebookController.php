@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AeTestResult;
 use App\Models\Enrollment;
 use App\Models\LearningModule;
 use App\Models\ProgressRecord;
@@ -187,6 +188,7 @@ class GradebookController extends Controller
 
         return Inertia::render('gradebook/show', [
             'enrollment' => $enrollment,
+            'aeResults' => $enrollment->student->aeTestResults()->with('recordedBy')->get(),
         ]);
     }
 
@@ -206,9 +208,19 @@ class GradebookController extends Controller
             'type' => ['required', 'in:assessment,activity,milestone'],
             'score' => ['nullable', 'numeric', 'min:0'],
             'max_score' => ['nullable', 'numeric', 'min:0'],
+            'competency_level' => ['nullable', 'in:beginning,developing,proficient,mastered'],
             'remarks' => ['nullable', 'string', 'max:1000'],
             'recorded_date' => ['required', 'date'],
         ]);
+
+        // Auto-derive the competency band from the score when not set explicitly.
+        if (empty($validated['competency_level']) && isset($validated['score'])) {
+            $max = $validated['max_score'] ?? null;
+            $percentage = ($max && $max > 0)
+                ? round(($validated['score'] / $max) * 100, 1)
+                : (float) $validated['score'];
+            $validated['competency_level'] = ProgressRecord::deriveCompetencyLevel($percentage);
+        }
 
         $enrollment->progressRecords()->create([
             ...$validated,
@@ -271,5 +283,49 @@ class GradebookController extends Controller
         }
 
         return back()->with('success', 'Enrollment status updated.');
+    }
+
+    /**
+     * Record an ALS A&E (Accreditation & Equivalency) test result for a learner.
+     */
+    public function storeAeResult(Enrollment $enrollment, Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        if ($user->isTeacher() && $enrollment->enrolled_by !== $user->id) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'level' => ['required', 'in:elementary,junior_high'],
+            'test_date' => ['required', 'date'],
+            'overall_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'result' => ['required', 'in:passed,failed'],
+            'certificate_no' => ['nullable', 'string', 'max:255'],
+            'remarks' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        AeTestResult::updateOrCreate(
+            ['student_id' => $enrollment->student_id, 'level' => $validated['level']],
+            [...$validated, 'recorded_by' => $user->id],
+        );
+
+        return back()->with('success', 'A&E test result saved.');
+    }
+
+    /**
+     * Delete an ALS A&E test result.
+     */
+    public function deleteAeResult(Enrollment $enrollment, AeTestResult $aeResult, Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        if ($user->isTeacher() && $enrollment->enrolled_by !== $user->id) {
+            abort(403);
+        }
+
+        $aeResult->delete();
+
+        return back()->with('success', 'A&E test result deleted.');
     }
 }

@@ -15,18 +15,19 @@ class LearningModuleSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create ALS subjects
+        // Create ALS subjects mapped to the 6 official Learning Strands (LS1-LS6)
         $subjects = [
-            ['name' => 'English', 'slug' => 'english', 'description' => 'Communication Arts - English'],
-            ['name' => 'Filipino', 'slug' => 'filipino', 'description' => 'Communication Arts - Filipino'],
-            ['name' => 'Mathematics', 'slug' => 'mathematics', 'description' => 'Mathematical and Problem-Solving Skills'],
-            ['name' => 'Science', 'slug' => 'science', 'description' => 'Scientific Literacy and Critical Thinking'],
-            ['name' => 'Digital Literacy', 'slug' => 'digital-literacy', 'description' => 'Digital Literacy and Technology Skills'],
-            ['name' => 'Life and Career Skills', 'slug' => 'life-career-skills', 'description' => 'Sustainable Use of Resources / Understanding the Self and Society'],
+            ['name' => 'English', 'slug' => 'english', 'strand_code' => 'LS1', 'description' => 'Communication Skills - English'],
+            ['name' => 'Filipino', 'slug' => 'filipino', 'strand_code' => 'LS1', 'description' => 'Communication Skills - Filipino'],
+            ['name' => 'Science', 'slug' => 'science', 'strand_code' => 'LS2', 'description' => 'Scientific Literacy and Critical Thinking Skills'],
+            ['name' => 'Mathematics', 'slug' => 'mathematics', 'strand_code' => 'LS3', 'description' => 'Mathematical and Problem-Solving Skills'],
+            ['name' => 'Life and Career Skills', 'slug' => 'life-career-skills', 'strand_code' => 'LS4', 'description' => 'Life and Career Skills'],
+            ['name' => 'Understanding the Self and Society', 'slug' => 'self-and-society', 'strand_code' => 'LS5', 'description' => 'Understanding the Self and Society'],
+            ['name' => 'Digital Literacy', 'slug' => 'digital-literacy', 'strand_code' => 'LS6', 'description' => 'Digital Citizenship'],
         ];
 
         foreach ($subjects as $subjectData) {
-            Subject::firstOrCreate(['slug' => $subjectData['slug']], $subjectData);
+            Subject::updateOrCreate(['slug' => $subjectData['slug']], $subjectData);
         }
 
         // Create sample modules

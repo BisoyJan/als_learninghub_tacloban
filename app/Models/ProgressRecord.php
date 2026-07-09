@@ -16,6 +16,7 @@ class ProgressRecord extends Model
         'type',
         'score',
         'max_score',
+        'competency_level',
         'remarks',
         'recorded_date',
     ];
@@ -29,7 +30,7 @@ class ProgressRecord extends Model
         ];
     }
 
-    protected $appends = ['type_label', 'percentage'];
+    protected $appends = ['type_label', 'percentage', 'competency_descriptor'];
 
     /**
      * Get the enrollment this record belongs to.
@@ -75,5 +76,55 @@ class ProgressRecord extends Model
         }
 
         return "{$this->score}%";
+    }
+
+    /**
+     * Numeric percentage value (0-100) or null when unscored.
+     */
+    public function getPercentageValueAttribute(): ?float
+    {
+        if ($this->score === null) {
+            return null;
+        }
+
+        if ($this->max_score && $this->max_score > 0) {
+            return round(($this->score / $this->max_score) * 100, 1);
+        }
+
+        return (float) $this->score;
+    }
+
+    /**
+     * ALS competency descriptor band. Uses an explicit competency_level when
+     * set, otherwise derives the band from the numeric percentage (pass = 75).
+     */
+    public function getCompetencyDescriptorAttribute(): ?string
+    {
+        $level = $this->competency_level ?? self::deriveCompetencyLevel($this->percentage_value);
+
+        return match ($level) {
+            'mastered' => 'Mastered',
+            'proficient' => 'Proficient',
+            'developing' => 'Developing',
+            'beginning' => 'Beginning',
+            default => null,
+        };
+    }
+
+    /**
+     * Map a numeric percentage (0-100) to a competency band key.
+     */
+    public static function deriveCompetencyLevel(?float $percentage): ?string
+    {
+        if ($percentage === null) {
+            return null;
+        }
+
+        return match (true) {
+            $percentage >= 90 => 'mastered',
+            $percentage >= 80 => 'proficient',
+            $percentage >= 75 => 'developing',
+            default => 'beginning',
+        };
     }
 }
